@@ -1,0 +1,1661 @@
+openapi: 3.0.0
+info:
+  title: Buy and Sell
+  description: A web application API which primary function is to serve as a platform
+    for selling and buying used item
+  contact:
+    email: t9haan01@students.oamk.fi
+  version: 1.0.0
+servers:
+- url: https://virtserver.swaggerhub.com/Morgrynn/test/1.0.0
+  description: SwaggerHub API Auto Mocking
+tags:
+- name: product
+  description: Access to products
+- name: user
+  description: Operations about user
+paths:
+  /signup:
+    post:
+      tags:
+      - user
+      summary: Create a new user
+      description: Create new user to system
+      operationId: post-users-signup
+      requestBody:
+        description: User details added for registration
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/body'
+            examples:
+              example-1:
+                value:
+                  email: anakin@jedi.com
+                  username: Skyguy
+                  password: $2a$06$ozuCYEND/LBfherUk4E/AuYqu02NA5f/tjSgmx4XddgyqSmQxNzO.
+                  name:
+                    firstname: Anakin
+                    lastname: Skywalker
+                  address:
+                    street: kurkelankangas 5
+                    number: A10
+                    postcode: "902110"
+                    city: Oulu
+                    country: Finland
+                  phone: "358859237845"
+      responses:
+        "201":
+          description: Resource has been Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_201'
+              examples:
+                example-1:
+                  value:
+                    userInfo:
+                    - userId: e15c636e-9c72-4f3b-99fe-c72876c186f6
+                      email: anakin@jedi.com
+                      username: Skyguy
+                      password: $2a$06$ozuCYEND/LBfherUk4E/AuYqu02NA5f/tjSgmx4XddgyqSmQxNzO.
+                      name:
+                        firstname: Anakin
+                        lastname: Skywalker
+                      address:
+                        street: kurkelankangas 5
+                        number: A10
+                        postcode: "902110"
+                        city: Oulu
+                        country: Finland
+                      phone: "358859237845"
+                      createDate: 2019-08-24
+        "202":
+          description: The request was accepted but has not been finished yet
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_202'
+              examples:
+                example-1:
+                  value:
+                    response: Please complete user registration
+        "405":
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_405'
+              examples:
+                example-1:
+                  value:
+                    error: Invalid input
+      x-swagger-router-controller: User
+  /products:
+    get:
+      tags: []
+      summary: Your GET endpoint
+      description: Get all products
+      operationId: get-products
+      parameters:
+      - name: startDate
+        in: query
+        description: Filter products from date created
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: 2019-11-11
+      - name: endDate
+        in: query
+        description: Filter products to date created
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: 2019-11-14
+      - name: city
+        in: query
+        description: Filter by city name
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: Oulu
+      - name: country
+        in: query
+        description: Filter by country name
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: Finland
+      - name: category
+        in: query
+        description: Filter by category
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: Electronics
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200'
+              examples:
+                example-1:
+                  value:
+                    productData:
+                    - id: 101
+                      title: Asus Laptop
+                      description: its working perfect in good condition the enter
+                        key don't work and there is no mouse coming with it and it
+                        can be used as tablet as well
+                      location:
+                        city: Oulu
+                        country: Finland
+                      images:
+                        img_1: testproduct.jpg
+                        img_2: testimg_two.jpg
+                        img_3: testimg_three.jpg
+                        img_4: testimg_four.jpg
+                      price: 99.99
+                      createDate: 2019-10-12
+                      deliveryType:
+                        shipping: true
+                        pickup: true
+                      user:
+                        name:
+                          firstname: Anakin
+                          lastname: Skywalker
+                        email: anakin@jedi.com
+                        phone: "358859237845"
+                      userId: 123e4567-e89b-12d3-a456-426655440000
+                      category: Electronics
+                      categoryId: 11
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400'
+              examples:
+                example-1:
+                  value:
+                    error: Product not available
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_404'
+              examples:
+                example-1:
+                  value:
+                    error: Product not found
+      x-swagger-router-controller: Default
+    post:
+      tags:
+      - product
+      summary: Signed in user can add products to database
+      description: Add new product
+      operationId: post-products
+      requestBody:
+        description: Post new product to system
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/body_1'
+            examples:
+              example-1:
+                value:
+                  title: Asus Laptop
+                  price: 99.99
+                  description: its working perfect in good condition the enter key
+                    don't work and there is no mouse coming with it and it can be
+                    used as tablet as well
+                  images:
+                    img_1: test_product.jpg
+                    img_2: side_view.jpg
+                    img_3: top_view.jpg
+                    img_4: product_view.jpg
+                  location:
+                    city: Oulu
+                    country: Finland
+                  deliveryType:
+                    shipping: true
+                    pickup: false
+                  userId: 123e4567-e89b-12d3-a456-426655440000
+                  category: Electronics
+                  categoryId: 11
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200'
+              examples:
+                example-1:
+                  value:
+                    productData:
+                    - id: 101
+                      title: Asus Laptop
+                      description: its working perfect in good condition the enter
+                        key don't work and there is no mouse coming with it and it
+                        can be used as tablet as well
+                      location:
+                        city: Oulu
+                        country: Finland
+                      images:
+                        img_1: testproduct.jpg
+                        img_2: testimg_two.jpg
+                        img_3: testimg_three.jpg
+                        img_4: testimg_four.jpg
+                      price: 99.99
+                      createDate: 2019-10-12
+                      deliveryType:
+                        shipping: true
+                        pickup: false
+                      user:
+                        name:
+                          firstname: Anakin
+                          lastname: Skywalker
+                        email: anakin@jedi.com
+                        phone: "358859237845"
+                      userId: 123e4567-e89b-12d3-a456-426655440000
+                      category: Electronics
+                      categoryId: 11
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401'
+              examples:
+                example-1:
+                  value:
+                    error: Authorization information is missing or invalid.
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_404_1'
+              examples:
+                example-1:
+                  value:
+                    error: A user with the specified ID was not found.
+      security:
+      - bearerAuth: []
+      x-swagger-router-controller: Product
+  /products/{product-id}:
+    get:
+      tags: []
+      summary: Your GET endpoint
+      description: Get product details from id
+      operationId: get-products-product-id
+      parameters:
+      - name: product-id
+        in: path
+        description: Unique identifier
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200'
+              examples:
+                example-1:
+                  value:
+                    productData:
+                    - id: 101
+                      title: Asus Laptop
+                      description: its working perfect in good condition the enter
+                        key don't work and there is no mouse coming with it and it
+                        can be used as tablet as well
+                      location:
+                        city: Oulu
+                        country: Finland
+                      images:
+                        img_1: testproduct.jpg
+                        img_2: testimg_two.jpg
+                        img_3: testimg_three.jpg
+                        img_4: testimg_four.jpg
+                      price: 99.99
+                      createDate: 2019-10-12
+                      deliveryType:
+                        shipping: true
+                        pickup: true
+                      user:
+                        name:
+                          firstname: Anakin
+                          lastname: Skywalker
+                        email: anakin@jedi.com
+                        phone: "358859237845"
+                      userId: 123e4567-e89b-12d3-a456-426655440000
+                      category: Electronics
+                      categoryId: 11
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_404_2'
+              examples:
+                example-1:
+                  value:
+                    error: Product not found
+      x-swagger-router-controller: Default
+    put:
+      tags:
+      - product
+      description: Update posted product
+      operationId: put-products-product-id
+      parameters:
+      - name: product-id
+        in: path
+        description: Unique identifier
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: Update product details
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/body_2'
+            examples:
+              example-1:
+                value:
+                  title: Asus Laptop
+                  price: 99.99
+                  description: its working perfect in good condition the enter key
+                    don't work and there is no mouse coming with it and it can be
+                    used as tablet as well
+                  images:
+                    img_1: test_product.jpg
+                    img_2: side_view.jpg
+                    img_3: top_view.jpg
+                    img_4: product_view.jpg
+                  location:
+                    city: Dublin
+                    country: Ireland
+                  deliveryType:
+                    shipping: true
+                    pickup: true
+                  categoryId: 11
+                  category: electronics
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_1'
+              examples:
+                example-1:
+                  value:
+                    productData:
+                    - id: 101
+                      title: Asus Laptop
+                      description: its working perfect in good condition the enter
+                        key don't work and there is no mouse coming with it and it
+                        can be used as tablet as well
+                      location:
+                        city: Oulu
+                        country: Finland
+                      images:
+                        img_1: testproduct.jpg
+                        img_2: testimg_two.jpg
+                        img_3: testimg_three.jpg
+                        img_4: testimg_four.jpg
+                      price: 99.99
+                      createDate: 2019-10-12
+                      deliveryType:
+                        shipping: true
+                        pickup: true
+                      user:
+                        name:
+                          firstname: Anakin
+                          lastname: Skywalker
+                        email: anakin@jedi.com
+                        phone: "358859237845"
+                      userId: 123e4567-e89b-12d3-a456-426655440000
+                      category: Electronics
+                      categoryId: 11
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401_1'
+              examples:
+                example-1:
+                  value:
+                    error: Authorization information is missing or invalid.
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_404_3'
+              examples:
+                example-1:
+                  value:
+                    error: A user with the specified ID was not found.
+      security:
+      - bearerAuth: []
+      x-swagger-router-controller: Product
+    delete:
+      tags:
+      - product
+      description: Product will be deleted from the database
+      operationId: delete-products-product-id
+      parameters:
+      - name: product-id
+        in: path
+        description: Unique identifier
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "204":
+          description: No Content
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_204'
+              examples:
+                example-1:
+                  value:
+                    description: The resource was deleted successfully.
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401_1'
+              examples:
+                example-1:
+                  value:
+                    error: Authorization information is missing or invalid.
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_404_4'
+              examples:
+                example-1:
+                  value:
+                    error: A user with the specified ID was not found.
+      security:
+      - bearerAuth: []
+      x-swagger-router-controller: Product
+  /users/{user-id}:
+    get:
+      tags: []
+      summary: Your GET endpoint
+      description: Get user information
+      operationId: get-users-user-id
+      parameters:
+      - name: user-id
+        in: path
+        description: Unique identifier
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_2'
+              examples:
+                example-1:
+                  value:
+                    userData:
+                      userId: e15c636e-9c72-4f3b-99fe-c72876c186f6
+                      email: anakin@jedi.com
+                      username: Skyguy
+                      password: $2a$06$ozuCYEND/LBfherUk4E/AuYqu02NA5f/tjSgmx4XddgyqSmQxNzO.
+                      name:
+                        firstname: Anakin
+                        lastname: Skywalker
+                      address:
+                        street: kurkelankangas 5
+                        number: A10
+                        postcode: "902110"
+                        city: Oulu
+                        country: Finland
+                      phone: "358859237845"
+                      createDate: 2019-08-24
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401_1'
+              examples: {}
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_404_4'
+              examples:
+                example-1:
+                  value:
+                    error: A user with the specified ID was not found.
+      security:
+      - bearerAuth: []
+      x-swagger-router-controller: Default
+    put:
+      tags:
+      - user
+      description: Update user data
+      operationId: put-users-user-id
+      parameters:
+      - name: user-id
+        in: path
+        description: Unique identifier
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        description: Update information
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/body_3'
+            examples:
+              example-1:
+                value:
+                  email: anakin@jedi.com
+                  username: Skyguy
+                  password: $2a$06$ozuCYEND/LBfherUk4E/AuYqu02NA5f/tjSgmx4XddgyqSmQxNzO.
+                  name:
+                    firstname: Anakin
+                    lastname: Slywalker
+                  address:
+                    street: kurkelankangas 5
+                    number: A10
+                    postcode: "90210"
+                    city: Oulu
+                    country: Finland
+                  phone: +358859237845
+          application/xml:
+            schema:
+              type: object
+              properties: {}
+          multipart/form-data:
+            schema:
+              type: object
+              properties: {}
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_3'
+              examples:
+                example-1:
+                  value:
+                    userData:
+                      userId: e15c636e-9c72-4f3b-99fe-c72876c186f6
+                      email: anakin@jedi.com
+                      username: Skyguy
+                      password: $2a$06$ozuCYEND/LBfherUk4E/AuYqu02NA5f/tjSgmx4XddgyqSmQxNzO.
+                      name:
+                        firstname: Anakin
+                        lastname: Skywalker
+                      address:
+                        street: kurkelankangas 5
+                        number: A10
+                        postcode: "902110"
+                        city: Oulu
+                        country: Finland
+                      phone: "358859237845"
+                      createDate: 2019-08-24
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401_2'
+              examples:
+                example-1:
+                  value:
+                    error: Not authorized to access user data
+      security:
+      - bearerAuth: []
+      x-swagger-router-controller: User
+    delete:
+      tags:
+      - user
+      description: Delete user from database
+      operationId: delete-users-user-id
+      parameters:
+      - name: user-id
+        in: path
+        description: Unique identifier
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "204":
+          description: No Content
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_204'
+              examples:
+                example-1:
+                  value:
+                    description: The resource was deleted successfully.
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401_2'
+              examples:
+                example-1:
+                  value:
+                    error: Not authorized to access user data
+      security:
+      - bearerAuth: []
+      x-swagger-router-controller: User
+  /login:
+    post:
+      tags:
+      - user
+      summary: Add a new user to the system
+      description: Post login credentials
+      operationId: post-users-login
+      requestBody:
+        description: Login to access system
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/body_4'
+            examples:
+              example-1:
+                value:
+                  email: anakin@jedi.com
+                  password: $2a$06$dMmvvhIu5r/WASNmbaEguOblW.oMQssiLd1oKUPhWdpxPsBk/9ub6
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_2'
+              examples:
+                example-1:
+                  value:
+                    userData:
+                      userId: e15c636e-9c72-4f3b-99fe-c72876c186f6
+                      email: anakin@jedi.com
+                      username: Skyguy
+                      password: $2a$06$ozuCYEND/LBfherUk4E/AuYqu02NA5f/tjSgmx4XddgyqSmQxNzO.
+                      name:
+                        firstname: Anakin
+                        lastname: Skywalker
+                      address:
+                        street: kurkelankangas 5
+                        number: A10
+                        postcode: "902110"
+                        city: Oulu
+                        country: Finland
+                      phone: "358859237845"
+                      createDate: 2019-08-24
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_400_1'
+              examples:
+                example-1:
+                  value:
+                    error: Bad request. Email / Password not entered correctly
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_401_1'
+              examples:
+                example-1:
+                  value:
+                    error: Authorization information is missing or invalid.
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_404_4'
+              examples:
+                example-1:
+                  value:
+                    error: A user with the specified ID was not found.
+      security:
+      - basicAuth: []
+      x-swagger-router-controller: User
+components:
+  schemas:
+    User:
+      title: Users
+      required:
+      - createDate
+      - email
+      - name
+      - password
+      - phone
+      - userId
+      - username
+      type: object
+      properties:
+        userId:
+          type: string
+          description: Unique indentification
+          format: uuid
+          readOnly: true
+          example: e15c636e-9c72-4f3b-99fe-c72876c186f6
+        email:
+          type: string
+          description: Unique email address
+          format: email
+          example: anakin@jedi.com
+        username:
+          type: string
+          example: Skyguy
+        password:
+          minLength: 6
+          pattern: ^[A-Za-z0-9 -_]+
+          type: string
+          format: password
+          example: $2a$06$ozuCYEND/LBfherUk4E/AuYqu02NA5f/tjSgmx4XddgyqSmQxNzO.
+        name:
+          $ref: '#/components/schemas/User_name'
+        address:
+          $ref: '#/components/schemas/signup_address'
+        phone:
+          type: string
+          example: "358859237845"
+        createDate:
+          type: string
+          description: The date the user was created.
+          format: date
+          example: 2019-08-24
+      description: Describes user details
+      example:
+        password: $2a$06$ozuCYEND/LBfherUk4E/AuYqu02NA5f/tjSgmx4XddgyqSmQxNzO.
+        address:
+          number: A10
+          country: Finland
+          city: Oulu
+          street: kurkelankangas 5
+          postcode: "902110"
+        phone: "358859237845"
+        name:
+          firstname: Anakin
+          lastname: Skywalker
+        userId: e15c636e-9c72-4f3b-99fe-c72876c186f6
+        email: anakin@jedi.com
+        username: Skyguy
+        createDate: 2019-08-24T00:00:00.000+0000
+      x-examples:
+        example-1:
+          userId: e15c636e-9c72-4f3b-99fe-c72876c186f6
+          email: anakin@jedi.com
+          username: Skyguy
+          password: $2a$06$ozuCYEND/LBfherUk4E/AuYqu02NA5f/tjSgmx4XddgyqSmQxNzO.
+          name:
+            firstname: Anakin
+            lastname: Skywalker
+          address:
+            street: kurkelankangas 5
+            number: A10
+            postcode: "902110"
+            city: Oulu
+            country: Finland
+          phone: "358859237845"
+          createDate: 2019-08-24
+    Product:
+      title: Product
+      required:
+      - category
+      - categoryId
+      - createDate
+      - deliveryType
+      - description
+      - id
+      - images
+      - location
+      - price
+      - title
+      - user
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique Product identification
+          format: int64
+          readOnly: true
+          example: 101
+        title:
+          type: string
+          example: Asus Laptop
+        description:
+          type: string
+          example: its working perfect in good condition the enter key don't work
+            and there is no mouse coming with it and it can be used as tablet as well
+        location:
+          $ref: '#/components/schemas/Product_location'
+        images:
+          $ref: '#/components/schemas/Product_images'
+        price:
+          type: number
+          format: float
+          example: 99.99
+        createDate:
+          type: string
+          format: date
+          readOnly: true
+          example: 2019-10-12
+        deliveryType:
+          $ref: '#/components/schemas/Product_deliveryType'
+        user:
+          $ref: '#/components/schemas/Product_user'
+        userId:
+          type: string
+          description: Unique user identification
+          format: uuid
+          readOnly: true
+          example: 123e4567-e89b-12d3-a456-426655440000
+        category:
+          type: string
+          readOnly: true
+          example: Electronics
+        categoryId:
+          type: integer
+          format: int64
+          example: 11
+      description: Describe product details
+      example:
+        images:
+          img_4: testimg_four.jpg
+          img_2: testimg_two.jpg
+          img_3: testimg_three.jpg
+          img_1: testproduct.jpg
+        price: 99.99
+        deliveryType:
+          shipping: true
+          pickup: true
+        description: its working perfect in good condition the enter key don't work
+          and there is no mouse coming with it and it can be used as tablet as well
+        location:
+          country: Finland
+          city: Oulu
+        id: 101
+        title: Asus Laptop
+        category: Electronics
+        user:
+          phone: "358859237845"
+          name:
+            firstname: Anakin
+            lastname: Skywalker
+          email: anakin@jedi.com
+        userId: 123e4567-e89b-12d3-a456-426655440000
+        categoryId: 11
+        createDate: 2019-10-12T00:00:00.000+0000
+      x-examples:
+        example-1:
+          id: 101
+          title: Asus Laptop
+          description: its working perfect in good condition the enter key don't work
+            and there is no mouse coming with it and it can be used as tablet as well
+          location:
+            city: Oulu
+            country: Finland
+          images:
+            img_1: testproduct.jpg
+            img_2: testimg_two.jpg
+            img_3: testimg_three.jpg
+            img_4: testimg_four.jpg
+          price: 99.9899999999999948840923025272786617279052734375
+          createDate: 2019-10-12
+          deliveryType:
+            shipping: true
+            pickup: true
+          user:
+            name:
+              firstname: Anakin
+              lastname: Skywalker
+            email: anakin@jedi.com
+            phone: "358859237845"
+          userId: 123e4567-e89b-12d3-a456-426655440000
+          category: Electronics
+          categoryId: 11
+    signup_name:
+      required:
+      - firstname
+      - lastname
+      type: object
+      properties:
+        firstname:
+          type: string
+          example: Anakin
+        lastname:
+          type: string
+          example: Skywalker
+    signup_address:
+      type: object
+      properties:
+        street:
+          type: string
+          example: kurkelankangas 5
+        number:
+          type: string
+          example: A10
+        postcode:
+          type: string
+          example: "902110"
+        city:
+          type: string
+          example: Oulu
+        country:
+          type: string
+          example: Finland
+      example:
+        number: A10
+        country: Finland
+        city: Oulu
+        street: kurkelankangas 5
+        postcode: "902110"
+    body:
+      required:
+      - email
+      - name
+      - password
+      - phone
+      - username
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          example: anakin@jedi.com
+        username:
+          type: string
+          example: Skyguy
+        password:
+          type: string
+          description: Hashed password
+          format: password
+          example: $2a$06$ozuCYEND/LBfherUk4E/AuYqu02NA5f/tjSgmx4XddgyqSmQxNzO.
+        name:
+          $ref: '#/components/schemas/signup_name'
+        address:
+          $ref: '#/components/schemas/signup_address'
+        phone:
+          type: string
+          example: "358859237845"
+    inline_response_201:
+      type: object
+      properties:
+        userInfo:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+      example:
+        userInfo:
+        - password: $2a$06$ozuCYEND/LBfherUk4E/AuYqu02NA5f/tjSgmx4XddgyqSmQxNzO.
+          address:
+            number: A10
+            country: Finland
+            city: Oulu
+            street: kurkelankangas 5
+            postcode: "902110"
+          phone: "358859237845"
+          name:
+            firstname: Anakin
+            lastname: Skywalker
+          userId: e15c636e-9c72-4f3b-99fe-c72876c186f6
+          email: anakin@jedi.com
+          username: Skyguy
+          createDate: 2019-08-24T00:00:00.000+0000
+        - password: $2a$06$ozuCYEND/LBfherUk4E/AuYqu02NA5f/tjSgmx4XddgyqSmQxNzO.
+          address:
+            number: A10
+            country: Finland
+            city: Oulu
+            street: kurkelankangas 5
+            postcode: "902110"
+          phone: "358859237845"
+          name:
+            firstname: Anakin
+            lastname: Skywalker
+          userId: e15c636e-9c72-4f3b-99fe-c72876c186f6
+          email: anakin@jedi.com
+          username: Skyguy
+          createDate: 2019-08-24T00:00:00.000+0000
+    inline_response_202:
+      required:
+      - response
+      type: object
+      properties:
+        response:
+          type: string
+          example: Please complete user registration
+    inline_response_405:
+      type: object
+      properties:
+        error:
+          type: string
+          example: Invalid input
+    inline_response_200:
+      type: object
+      properties:
+        productData:
+          type: array
+          items:
+            $ref: '#/components/schemas/Product'
+      example:
+        productData:
+        - images:
+            img_4: testimg_four.jpg
+            img_2: testimg_two.jpg
+            img_3: testimg_three.jpg
+            img_1: testproduct.jpg
+          price: 99.99
+          deliveryType:
+            shipping: true
+            pickup: true
+          description: its working perfect in good condition the enter key don't work
+            and there is no mouse coming with it and it can be used as tablet as well
+          location:
+            country: Finland
+            city: Oulu
+          id: 101
+          title: Asus Laptop
+          category: Electronics
+          user:
+            phone: "358859237845"
+            name:
+              firstname: Anakin
+              lastname: Skywalker
+            email: anakin@jedi.com
+          userId: 123e4567-e89b-12d3-a456-426655440000
+          categoryId: 11
+          createDate: 2019-10-12T00:00:00.000+0000
+        - images:
+            img_4: testimg_four.jpg
+            img_2: testimg_two.jpg
+            img_3: testimg_three.jpg
+            img_1: testproduct.jpg
+          price: 99.99
+          deliveryType:
+            shipping: true
+            pickup: true
+          description: its working perfect in good condition the enter key don't work
+            and there is no mouse coming with it and it can be used as tablet as well
+          location:
+            country: Finland
+            city: Oulu
+          id: 101
+          title: Asus Laptop
+          category: Electronics
+          user:
+            phone: "358859237845"
+            name:
+              firstname: Anakin
+              lastname: Skywalker
+            email: anakin@jedi.com
+          userId: 123e4567-e89b-12d3-a456-426655440000
+          categoryId: 11
+          createDate: 2019-10-12T00:00:00.000+0000
+    inline_response_400:
+      type: object
+      properties:
+        error:
+          type: string
+          readOnly: true
+          example: Product not available
+    inline_response_404:
+      type: object
+      properties:
+        error:
+          type: string
+          example: Product not found
+    products_images:
+      required:
+      - img_1
+      type: object
+      properties:
+        img_1:
+          type: string
+          example: test_product.jpg
+        img_2:
+          type: string
+          example: side_view.jpg
+        img_3:
+          type: string
+          example: top_view.jpg
+        img_4:
+          type: string
+          example: product_view.jpg
+    products_location:
+      type: object
+      properties:
+        city:
+          type: string
+          example: Oulu
+        country:
+          type: string
+          example: Finland
+    products_deliveryType:
+      type: object
+      properties:
+        shipping:
+          type: boolean
+        pickup:
+          type: boolean
+    body_1:
+      required:
+      - deliveryType
+      - description
+      - location
+      - price
+      - title
+      type: object
+      properties:
+        title:
+          type: string
+          example: Asus Laptop
+        price:
+          minimum: 0
+          type: number
+          description: Asking price for product
+          format: float
+          example: 99.99
+        description:
+          type: string
+          example: its working perfect in good condition the enter key don't work
+            and there is no mouse coming with it and it can be used as tablet as well
+        images:
+          $ref: '#/components/schemas/products_images'
+        location:
+          $ref: '#/components/schemas/products_location'
+        deliveryType:
+          $ref: '#/components/schemas/products_deliveryType'
+        userId:
+          type: string
+          format: uuid
+          example: 123e4567-e89b-12d3-a456-426655440000
+        category:
+          type: string
+          example: Electronics
+        categoryId:
+          type: integer
+          example: 11
+    inline_response_401:
+      required:
+      - error
+      type: object
+      properties:
+        error:
+          type: string
+          readOnly: true
+          example: Authorization information is missing or invalid.
+    inline_response_404_1:
+      required:
+      - error
+      type: object
+      properties:
+        error:
+          type: string
+          readOnly: true
+          example: A user with the specified ID was not found.
+    inline_response_404_2:
+      required:
+      - error
+      type: object
+      properties:
+        error:
+          type: string
+          example: Product not found
+    productsproductid_images:
+      type: object
+      properties:
+        img_1:
+          type: string
+          example: test_product.jpg
+        img_2:
+          type: string
+          example: side_view.jpg
+        img_3:
+          type: string
+          example: top_view.jpg
+        img_4:
+          type: string
+          example: product_view.jpg
+    productsproductid_location:
+      type: object
+      properties:
+        city:
+          type: string
+          example: Dublin
+        country:
+          type: string
+          example: Ireland
+    body_2:
+      type: object
+      properties:
+        title:
+          type: string
+          example: Asus Laptop
+        price:
+          type: number
+          format: float
+          example: 99.99
+        description:
+          type: string
+          example: its working perfect in good condition the enter key don't work
+            and there is no mouse coming with it and it can be used as tablet as well
+        images:
+          $ref: '#/components/schemas/productsproductid_images'
+        location:
+          $ref: '#/components/schemas/productsproductid_location'
+        deliveryType:
+          $ref: '#/components/schemas/products_deliveryType'
+        categoryId:
+          type: number
+          example: 11
+        category:
+          type: string
+          example: electronics
+    inline_response_200_1:
+      required:
+      - productData
+      type: object
+      properties:
+        productData:
+          type: array
+          items:
+            $ref: '#/components/schemas/Product'
+      example:
+        productData:
+        - images:
+            img_4: testimg_four.jpg
+            img_2: testimg_two.jpg
+            img_3: testimg_three.jpg
+            img_1: testproduct.jpg
+          price: 99.99
+          deliveryType:
+            shipping: true
+            pickup: true
+          description: its working perfect in good condition the enter key don't work
+            and there is no mouse coming with it and it can be used as tablet as well
+          location:
+            country: Finland
+            city: Oulu
+          id: 101
+          title: Asus Laptop
+          category: Electronics
+          user:
+            phone: "358859237845"
+            name:
+              firstname: Anakin
+              lastname: Skywalker
+            email: anakin@jedi.com
+          userId: 123e4567-e89b-12d3-a456-426655440000
+          categoryId: 11
+          createDate: 2019-10-12T00:00:00.000+0000
+        - images:
+            img_4: testimg_four.jpg
+            img_2: testimg_two.jpg
+            img_3: testimg_three.jpg
+            img_1: testproduct.jpg
+          price: 99.99
+          deliveryType:
+            shipping: true
+            pickup: true
+          description: its working perfect in good condition the enter key don't work
+            and there is no mouse coming with it and it can be used as tablet as well
+          location:
+            country: Finland
+            city: Oulu
+          id: 101
+          title: Asus Laptop
+          category: Electronics
+          user:
+            phone: "358859237845"
+            name:
+              firstname: Anakin
+              lastname: Skywalker
+            email: anakin@jedi.com
+          userId: 123e4567-e89b-12d3-a456-426655440000
+          categoryId: 11
+          createDate: 2019-10-12T00:00:00.000+0000
+    inline_response_401_1:
+      required:
+      - error
+      type: object
+      properties:
+        error:
+          type: string
+          example: Authorization information is missing or invalid.
+    inline_response_404_3:
+      required:
+      - error
+      type: object
+      properties:
+        error:
+          type: string
+          example: A user with the specified ID was not found.
+    inline_response_204:
+      type: object
+      properties:
+        description:
+          type: string
+          example: The resource was deleted successfully.
+      example:
+        description: The resource was deleted successfully.
+    inline_response_404_4:
+      type: object
+      properties:
+        error:
+          type: string
+          example: A user with the specified ID was not found.
+    inline_response_200_2:
+      required:
+      - userData
+      type: object
+      properties:
+        userData:
+          $ref: '#/components/schemas/User'
+      example:
+        userData:
+          password: $2a$06$ozuCYEND/LBfherUk4E/AuYqu02NA5f/tjSgmx4XddgyqSmQxNzO.
+          address:
+            number: A10
+            country: Finland
+            city: Oulu
+            street: kurkelankangas 5
+            postcode: "902110"
+          phone: "358859237845"
+          name:
+            firstname: Anakin
+            lastname: Skywalker
+          userId: e15c636e-9c72-4f3b-99fe-c72876c186f6
+          email: anakin@jedi.com
+          username: Skyguy
+          createDate: 2019-08-24T00:00:00.000+0000
+    usersuserid_name:
+      type: object
+      properties:
+        firstname:
+          type: string
+          example: Anakin
+        lastname:
+          type: string
+          example: Slywalker
+    usersuserid_address:
+      type: object
+      properties:
+        street:
+          type: string
+          example: kurkelankangas 5
+        number:
+          type: string
+          example: A10
+        postcode:
+          type: string
+          example: "90210"
+        city:
+          type: string
+          example: Oulu
+        country:
+          type: string
+          example: Finland
+    body_3:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          example: anakin@jedi.com
+        username:
+          type: string
+          example: Skyguy
+        password:
+          type: string
+          format: password
+          example: $2a$06$ozuCYEND/LBfherUk4E/AuYqu02NA5f/tjSgmx4XddgyqSmQxNzO.
+        name:
+          $ref: '#/components/schemas/usersuserid_name'
+        address:
+          $ref: '#/components/schemas/usersuserid_address'
+        phone:
+          type: string
+          example: +358859237845
+    inline_response_200_3:
+      type: object
+      properties:
+        userData:
+          $ref: '#/components/schemas/User'
+      example:
+        userData:
+          password: $2a$06$ozuCYEND/LBfherUk4E/AuYqu02NA5f/tjSgmx4XddgyqSmQxNzO.
+          address:
+            number: A10
+            country: Finland
+            city: Oulu
+            street: kurkelankangas 5
+            postcode: "902110"
+          phone: "358859237845"
+          name:
+            firstname: Anakin
+            lastname: Skywalker
+          userId: e15c636e-9c72-4f3b-99fe-c72876c186f6
+          email: anakin@jedi.com
+          username: Skyguy
+          createDate: 2019-08-24T00:00:00.000+0000
+    inline_response_401_2:
+      required:
+      - error
+      type: object
+      properties:
+        error:
+          type: string
+          example: Not authorized to access user data
+    body_4:
+      required:
+      - email
+      - password
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          example: anakin@jedi.com
+        password:
+          type: string
+          description: Hashed password
+          format: password
+          example: $2a$06$dMmvvhIu5r/WASNmbaEguOblW.oMQssiLd1oKUPhWdpxPsBk/9ub6
+    inline_response_400_1:
+      required:
+      - error
+      type: object
+      properties:
+        error:
+          type: string
+          example: Bad request. Email / Password not entered correctly
+    User_name:
+      type: object
+      properties:
+        firstname:
+          type: string
+          example: Anakin
+        lastname:
+          type: string
+          example: Skywalker
+      example:
+        firstname: Anakin
+        lastname: Skywalker
+    Product_location:
+      required:
+      - city
+      - country
+      type: object
+      properties:
+        city:
+          type: string
+          example: Oulu
+        country:
+          type: string
+          example: Finland
+      example:
+        country: Finland
+        city: Oulu
+    Product_images:
+      required:
+      - img_1
+      type: object
+      properties:
+        img_1:
+          type: string
+          readOnly: true
+          example: testproduct.jpg
+        img_2:
+          type: string
+          readOnly: true
+          example: testimg_two.jpg
+        img_3:
+          type: string
+          readOnly: true
+          example: testimg_three.jpg
+        img_4:
+          type: string
+          readOnly: true
+          example: testimg_four.jpg
+      description: Max 4 images can be uploaded
+      example:
+        img_4: testimg_four.jpg
+        img_2: testimg_two.jpg
+        img_3: testimg_three.jpg
+        img_1: testproduct.jpg
+    Product_deliveryType:
+      required:
+      - pickup
+      - shipping
+      type: object
+      properties:
+        shipping:
+          type: boolean
+        pickup:
+          type: boolean
+      description: Choose delivery type
+      example:
+        shipping: true
+        pickup: true
+    Product_user_name:
+      type: object
+      properties:
+        firstname:
+          type: string
+          readOnly: true
+          example: Anakin
+        lastname:
+          type: string
+          readOnly: true
+          example: Skywalker
+      example:
+        firstname: Anakin
+        lastname: Skywalker
+    Product_user:
+      type: object
+      properties:
+        name:
+          $ref: '#/components/schemas/Product_user_name'
+        email:
+          type: string
+          format: email
+          readOnly: true
+          example: anakin@jedi.com
+        phone:
+          type: string
+          readOnly: true
+          example: "358859237845"
+      example:
+        phone: "358859237845"
+        name:
+          firstname: Anakin
+          lastname: Skywalker
+        email: anakin@jedi.com
+  responses: {}
+  parameters:
+    UserId:
+      name: user-id
+      in: path
+      description: Unique identification number
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: string
+        format: uuid
+        example: 123e4567-e89b-12d3-a456-426655440000
+    ProductId:
+      name: ProductId
+      in: path
+      description: Unique Product identification
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: integer
+        format: int64
+        example: 101
+  securitySchemes:
+    basicAuth:
+      type: http
+      description: Basic authentication involves sending a verified username and password
+        with your request.
+      scheme: basic
+    bearerAuth:
+      type: http
+      description: Bearer tokens allow requests to authenticate using an access key,
+        such as a JSON Web Token (JWT)
+      scheme: bearer
