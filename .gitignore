@@ -74,6 +74,9 @@ web_modules/
 development.env
 production.env
 
+# jsonwebtokens
+/json/jwtKey.json
+
 # parcel-bundler cache (https://parceljs.org/)
 .cache
 .parcel-cache
