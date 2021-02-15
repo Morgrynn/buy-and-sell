@@ -1,0 +1,316 @@
+{
+    "type": "object",
+    "title": "Product Details for testing",
+    "examples": [
+        {
+            "productId": 1,
+            "title": "Asus Laptop",
+            "description": "its working perfect in good condition the enter key don't work and there is no mouse coming with it and it can be used as tablet as well",
+            "city": "Oulu",
+            "country": "Finland",
+            "images": [
+                {
+                    "originalname": "mando.jpg"
+                },
+                {
+                    "originalname": "Morty.png"
+                },
+                {
+                    "originalname": "Orangutan-Jungle-School-1.jpg"
+                },
+                {
+                    "originalname": "silicon-valley-jokes.jpg"
+                }
+            ],
+            "price": 99.99,
+            "shipping": false,
+            "pickup": true,
+            "userId": "e15c636e-9c72-4f3b-99fe-c72876c186f6",
+            "user": {
+                "name": {
+                    "firstname": "Anakin",
+                    "lastname": "Skywalker"
+                },
+                "email": "anakin@jedi.com",
+                "phone": "358859237845"
+            },
+            "category": "Electronics",
+            "categoryId": 11,
+            "createDate": "2021-01-10"
+        }
+    ],
+    "required": [
+        "productId",
+        "title",
+        "description",
+        "city",
+        "country",
+        "images",
+        "price",
+        "shipping",
+        "pickup",
+        "userId",
+        "user",
+        "category",
+        "categoryId",
+        "createDate"
+    ],
+    "properties": {
+        "productId": {
+            "$id": "#/properties/productId",
+            "type": "number",
+            "title": "The productId schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": 0,
+            "examples": [
+                1
+            ]
+        },
+        "title": {
+            "$id": "#/properties/title",
+            "type": "string",
+            "title": "The title schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+                "Asus Laptop"
+            ]
+        },
+        "description": {
+            "$id": "#/properties/description",
+            "type": "string",
+            "title": "The description schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+                "its working perfect in good condition the enter key don't work and there is no mouse coming with it and it can be used as tablet as well"
+            ]
+        },
+        "city": {
+            "$id": "#/properties/city",
+            "type": "string",
+            "title": "The city schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+                "Oulu"
+            ]
+        },
+        "country": {
+            "$id": "#/properties/country",
+            "type": "string",
+            "title": "The country schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+                "Finland"
+            ]
+        },
+        "images": {
+            "$id": "#/properties/images",
+            "type": "array",
+            "title": "The images schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": [],
+            "examples": [
+                [
+                    {
+                        "originalname": "mando.jpg"
+                    },
+                    {
+                        "originalname": "Morty.png"
+                    }
+                ]
+            ],
+            "items": {
+                "$id": "#/properties/images/items",
+                "anyOf": [
+                    {
+                        "$id": "#/properties/images/items/anyOf/0",
+                        "type": "object",
+                        "title": "The first anyOf schema",
+                        "description": "An explanation about the purpose of this instance.",
+                        "default": {},
+                        "examples": [
+                            {
+                                "originalname": "mando.jpg"
+                            }
+                        ],
+                        "required": [
+                            "originalname"
+                        ],
+                        "properties": {
+                            "originalname": {
+                                "$id": "#/properties/images/items/anyOf/0/properties/originalname",
+                                "type": "string",
+                                "title": "The originalname schema",
+                                "description": "An explanation about the purpose of this instance.",
+                                "default": "",
+                                "examples": [
+                                    "mando.jpg"
+                                ]
+                            }
+                        },
+                        "additionalProperties": false
+                    }
+                ]
+            }
+        },
+        "price": {
+            "$id": "#/properties/price",
+            "type": "number",
+            "title": "The price schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": 0.0,
+            "examples": [
+                99.99
+            ]
+        },
+        "shipping": {
+            "$id": "#/properties/shipping",
+            "type": "boolean",
+            "title": "The shipping schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": false,
+            "examples": [
+                false
+            ]
+        },
+        "pickup": {
+            "$id": "#/properties/pickup",
+            "type": "boolean",
+            "title": "The pickup schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": false,
+            "examples": [
+                true
+            ]
+        },
+        "userId": {
+            "$id": "#/properties/userId",
+            "type": "string",
+            "title": "The userId schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+                "e15c636e-9c72-4f3b-99fe-c72876c186f6"
+            ]
+        },
+        "user": {
+            "$id": "#/properties/user",
+            "type": "object",
+            "title": "The user schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": {},
+            "examples": [
+                {
+                    "name": {
+                        "firstname": "Anakin",
+                        "lastname": "Skywalker"
+                    },
+                    "email": "anakin@jedi.com",
+                    "phone": "358859237845"
+                }
+            ],
+            "required": [
+                "name",
+                "email",
+                "phone"
+            ],
+            "properties": {
+                "name": {
+                    "$id": "#/properties/user/properties/name",
+                    "type": "object",
+                    "title": "The name schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": {},
+                    "examples": [
+                        {
+                            "firstname": "Anakin",
+                            "lastname": "Skywalker"
+                        }
+                    ],
+                    "required": [
+                        "firstname",
+                        "lastname"
+                    ],
+                    "properties": {
+                        "firstname": {
+                            "$id": "#/properties/user/properties/name/properties/firstname",
+                            "type": "string",
+                            "title": "The firstname schema",
+                            "description": "An explanation about the purpose of this instance.",
+                            "default": "",
+                            "examples": [
+                                "Anakin"
+                            ]
+                        },
+                        "lastname": {
+                            "$id": "#/properties/user/properties/name/properties/lastname",
+                            "type": "string",
+                            "title": "The lastname schema",
+                            "description": "An explanation about the purpose of this instance.",
+                            "default": "",
+                            "examples": [
+                                "Skywalker"
+                            ]
+                        }
+                    },
+                    "additionalProperties": false
+                },
+                "email": {
+                    "$id": "#/properties/user/properties/email",
+                    "type": "string",
+                    "title": "The email schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": "",
+                    "examples": [
+                        "anakin@jedi.com"
+                    ]
+                },
+                "phone": {
+                    "$id": "#/properties/user/properties/phone",
+                    "type": "string",
+                    "title": "The phone schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": "",
+                    "examples": [
+                        "358859237845"
+                    ]
+                }
+            },
+            "additionalProperties": false
+        },
+        "category": {
+            "$id": "#/properties/category",
+            "type": "string",
+            "title": "The category schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+                "Electronics"
+            ]
+        },
+        "categoryId": {
+            "$id": "#/properties/categoryId",
+            "type": "integer",
+            "title": "The categoryId schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": 0,
+            "examples": [
+                11
+            ]
+        },
+        "createDate": {
+            "$id": "#/properties/createDate",
+            "type": "string",
+            "title": "The createDate schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+                "2021-01-10"
+            ]
+        }
+    },
+    "additionalProperties": false
+}
