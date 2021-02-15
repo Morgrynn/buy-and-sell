@@ -1,0 +1,18 @@
+{
+    "type": "object",
+    "title": "User already exists",
+    "required": [
+        "msg"
+    ],
+    "properties": {
+        "msg": {
+            "$id": "#/properties/msg",
+            "type": "string",
+            "title": "The msg schema",
+            "examples": [
+                "Email address already in system. Please login."
+            ]
+        }
+    },
+    "additionalProperties": false
+}
