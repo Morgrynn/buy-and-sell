@@ -1,0 +1,31 @@
+{
+    "type": "object",
+    "title": "User created successfully schema",
+    "properties": {
+        "msg": {
+            "$id": "#/properties/msg",
+            "type": "string",
+            "title": "The msg schema",
+            "examples": [
+                "Registration completed."
+            ]
+        },
+        "userCreated": {
+            "$id": "#/properties/userCreated",
+            "type": "object",
+            "title": "The userCreated schema",
+            "required": [
+                "userId"
+            ],
+            "properties": {
+                "userId": {
+                    "$id": "#/properties/userCreated/properties/userId",
+                    "type": "string",
+                    "title": "The userId schema"
+                }
+            },
+            "additionalProperties": false
+        }
+    },
+    "additionalProperties": false
+}
