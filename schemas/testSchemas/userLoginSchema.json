@@ -1,0 +1,23 @@
+{
+    "type": "object",
+    "title": "Login schema token and userId",
+    "properties": {
+        "token": {
+            "$id": "#/properties/token",
+            "type": "string",
+            "title": "The token schema",
+            "examples": [
+                "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiZTE1YzYzNmUtOWM3Mi00ZjNiLTk5ZmUtYzcyODc2YzE4NmY2In0sImlhdCI6MTYxMzMzMDE0OCwiZXhwIjoxNjEzMzMzNzQ4fQ.iaQyO8YamieDCoeAK5iYykBhGnysje0012hp7RWhy2c"
+            ]
+        },
+        "userId": {
+            "$id": "#/properties/userId",
+            "type": "string",
+            "title": "The userId schema",
+            "examples": [
+                "e15c636e-9c72-4f3b-99fe-c72876c186f6"
+            ]
+        }
+    },
+    "additionalProperties": false
+}
