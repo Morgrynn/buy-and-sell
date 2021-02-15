@@ -1,0 +1,205 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "$id": "http://example.com/example.json",
+    "type": "object",
+    "title": "The root schema",
+    "description": "The root schema comprises the entire JSON document.",
+    "default": {},
+    "examples": [
+        {
+            "userId": "a74e3017-191e-4355-87e5-b2699064801d",
+            "email": "anakin@jedi.com",
+            "username": "Skyguy",
+            "password": "$2a$06$.wN3/.35VwkSwSPL6/M0seXhTdTtnHTy4ZkXgD4ARYchDtM5FRVL.",
+            "name": {
+                "firstname": "Anakin",
+                "lastname": "Skywalker"
+            },
+            "address": {
+                "street": "kurkelankangas 5",
+                "number": "A10",
+                "postcode": "902110",
+                "city": "Oulu",
+                "country": "Finland"
+            },
+            "phone": "358859237845"
+        }
+    ],
+    "required": [
+        "email",
+        "username",
+        "password",
+        "name",
+        "address",
+        "phone"
+    ],
+    "properties": {
+        "userId": {
+            "$id": "#/properties/userId",
+            "type": "string",
+            "title": "The userId schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+                "a74e3017-191e-4355-87e5-b2699064801d"
+            ]
+        },
+        "email": {
+            "$id": "#/properties/email",
+            "type": "string",
+            "title": "The email schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+                "anakin@jedi.com"
+            ]
+        },
+        "username": {
+            "$id": "#/properties/username",
+            "type": "string",
+            "title": "The username schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+                "Skyguy"
+            ]
+        },
+        "password": {
+            "$id": "#/properties/password",
+            "type": "string",
+            "title": "The password schema",
+            "description": "An explanation about the purpose of this instance.",
+            "minLength": 6,
+            "examples": [
+                "$2a$06$.wN3/.35VwkSwSPL6/M0seXhTdTtnHTy4ZkXgD4ARYchDtM5FRVL."
+            ]
+        },
+        "name": {
+            "$id": "#/properties/name",
+            "type": "object",
+            "title": "The name schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": {},
+            "examples": [
+                {
+                    "firstname": "Anakin",
+                    "lastname": "Skywalker"
+                }
+            ],
+            "required": [
+                "firstname",
+                "lastname"
+            ],
+            "properties": {
+                "firstname": {
+                    "$id": "#/properties/name/properties/firstname",
+                    "type": "string",
+                    "title": "The firstname schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": "",
+                    "examples": [
+                        "Anakin"
+                    ]
+                },
+                "lastname": {
+                    "$id": "#/properties/name/properties/lastname",
+                    "type": "string",
+                    "title": "The lastname schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": "",
+                    "examples": [
+                        "Skywalker"
+                    ]
+                }
+            },
+            "additionalProperties": false
+        },
+        "address": {
+            "$id": "#/properties/address",
+            "type": "object",
+            "title": "The address schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": {},
+            "examples": [
+                {
+                    "street": "kurkelankangas 5",
+                    "number": "A10",
+                    "postcode": "902110",
+                    "city": "Oulu",
+                    "country": "Finland"
+                }
+            ],
+            "required": [
+                "street",
+                "number",
+                "postcode",
+                "city",
+                "country"
+            ],
+            "properties": {
+                "street": {
+                    "$id": "#/properties/address/properties/street",
+                    "type": "string",
+                    "title": "The street schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": "",
+                    "examples": [
+                        "kurkelankangas 5"
+                    ]
+                },
+                "number": {
+                    "$id": "#/properties/address/properties/number",
+                    "type": "string",
+                    "title": "The number schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": "",
+                    "examples": [
+                        "A10"
+                    ]
+                },
+                "postcode": {
+                    "$id": "#/properties/address/properties/postcode",
+                    "type": "string",
+                    "title": "The postcode schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": "",
+                    "examples": [
+                        "902110"
+                    ]
+                },
+                "city": {
+                    "$id": "#/properties/address/properties/city",
+                    "type": "string",
+                    "title": "The city schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": "",
+                    "examples": [
+                        "Oulu"
+                    ]
+                },
+                "country": {
+                    "$id": "#/properties/address/properties/country",
+                    "type": "string",
+                    "title": "The country schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": "",
+                    "examples": [
+                        "Finland"
+                    ]
+                }
+            },
+            "additionalProperties": false
+        },
+        "phone": {
+            "$id": "#/properties/phone",
+            "type": "string",
+            "title": "The phone schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+                "358859237845"
+            ]
+        }
+    },
+    "additionalProperties": false
+}
