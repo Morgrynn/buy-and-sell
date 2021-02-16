@@ -23,6 +23,12 @@ router.post(
   userController.login
 );
 
+router.get(
+  '',
+  passportInstance.authenticate('jwt', { session: false }),
+  userController.getUser
+);
+
 router.put(
   '',
   passportInstance.authenticate('jwt', { session: false }),
