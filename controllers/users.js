@@ -13,7 +13,7 @@ exports.signup = (req, res, next) => {
   if (result) {
     return res
       .status(400)
-      .json({ msg: 'Email address already in system. Please login.'});
+      .json({ msg: 'Email address already in system. Please login.' });
   } else {
     newUser = {
       userId: uuidv4(),
@@ -63,6 +63,19 @@ exports.login = (req, res, next) => {
   return res.status(200).json({ token: token, userId: body.id });
 };
 
+exports.getUser = (req, res, next) => {
+  const userId = req.user.id;
+  const result = users.getUserById(userId);
+  if (!result) {
+    return res.status(403).json({ msg: 'Not Authorized.' });
+  } else {
+    return res.status(200).json({
+      msg: 'User details',
+      user: result,
+    });
+  }
+};
+
 exports.updateUser = (req, res, next) => {
   const userId = req.user.id;
   const result = users.getUserById(userId);
@@ -70,14 +83,18 @@ exports.updateUser = (req, res, next) => {
     return res.status(403).json({ msg: 'Not Authorized.' });
   } else {
     const updateUser = req.body;
+    const newPassword = bcrypt.hashSync(updateUser.password, 6);
+    const newDate = new Date().toISOString().slice(0, 10)
+    result.username = updateUser.username ? updateUser.username : result.username;
+    result.password = newPassword ? newPassword : result.password;
     result.name = updateUser.name ? updateUser.name : result.name;
     result.address = updateUser.address ? updateUser.address : result.address;
     result.phone = updateUser.phone ? updateUser.phone : result.phone;
+    result.createDate = newDate ? newDate : result.createDate;
     // TODO: REMEMBER JSON MSG AND USERDATA ONLY USED FOR DEBUGGING
     res.status(201).json({
       msg: 'User updated.',
-      user: result,
-      users: userData,
+      user: result
     });
   }
 };
