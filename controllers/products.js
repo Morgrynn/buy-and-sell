@@ -97,42 +97,66 @@ exports.createProduct = (req, res, next) => {
         .status(400)
         .json({ msg: `Category doesn't exist see list ${categories}` });
     } else {
-      const {
-        title,
-        description,
-        city,
-        country,
-        price,
-        shipping,
-        pickup,
-      } = req.body;
-      productData.push({
-        productId: productData.length + 1,
-        title,
-        description,
-        city,
-        country,
-        images: req.files['images'].map((image) => {
-          return {
-            originalname: image.originalname,
-          };
-        }),
-        price,
-        shipping,
-        pickup,
-        userId,
-        user: {
-          name: name,
-          email: email,
-          phone: phone,
-        },
-        category: categoryInfo.name,
-        categoryId: categoryInfo.id,
-        createDate: new Date().toISOString().slice(0, 10),
-      });
+      const { title, description, city, country, price, shipping } = req.body;
+      if (shipping === 'false') {
+        productData.push({
+          productId: productData.length + 1,
+          title,
+          description,
+          city,
+          country,
+          images: req.files['images'].map((image) => {
+            return {
+              originalname: image.originalname,
+            };
+          }),
+          price,
+          shipping,
+          pickup: 'true',
+          userId,
+          user: {
+            name: name,
+            email: email,
+            phone: phone,
+          },
+          category: categoryInfo.name,
+          categoryId: categoryInfo.id,
+          createDate: new Date().toISOString().slice(0, 10),
+        });
+        
+      } else {
+        productData.push({
+          productId: productData.length + 1,
+          title,
+          description,
+          city,
+          country,
+          images: req.files['images'].map((image) => {
+            return {
+              originalname: image.originalname,
+            };
+          }),
+          price,
+          shipping,
+          pickup: 'false',
+          userId,
+          user: {
+            name: name,
+            email: email,
+            phone: phone,
+          },
+          category: categoryInfo.name,
+          categoryId: categoryInfo.id,
+          createDate: new Date().toISOString().slice(0, 10),
+        });
+      }
+      const product =
+        productData[
+          Object.keys(productData)[Object.keys(productData).length - 1]
+        ];
       return res.status(201).json({
         msg: 'Product created.',
-        productData,
+        product: product,
       });
     }
   }
