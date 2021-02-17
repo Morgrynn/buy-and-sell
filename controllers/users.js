@@ -67,7 +67,7 @@ exports.getUser = (req, res, next) => {
   const userId = req.user.id;
   const result = users.getUserById(userId);
   if (!result) {
-    return res.status(403).json({ msg: 'Not Authorized.' });
+    return res.status(401).json({ msg: 'Not Authorized.' });
   } else {
     return res.status(200).json({
       msg: 'User details',
@@ -80,7 +80,7 @@ exports.updateUser = (req, res, next) => {
   const userId = req.user.id;
   const result = users.getUserById(userId);
   if (!result) {
-    return res.status(403).json({ msg: 'Not Authorized.' });
+    return res.status(401).json({ msg: 'Not Authorized.' });
   } else {
     const updateUser = req.body;
     const newPassword = bcrypt.hashSync(updateUser.password, 6);
@@ -103,13 +103,15 @@ exports.deleteUser = (req, res, next) => {
   const userId = req.user.id;
   const result = users.getUserById(userId);
   if (!result) {
-    return res.status(403).json({ msg: 'Not Authorized.' });
+    return res.status(401).json({ msg: 'Not Authorized.' });
   }
   if (result) {
     const index = users.getAllUsers().indexOf(result);
     let removed = users.getAllUsers().splice(index, 1);
+    // users.getAllUsers().splice(index, 1);
+    // return removed;
     // TODO: REMEMBER JSON MSG AND USERDATA ONLY USED FOR DEBUGGING RESET STATUSCODE
-    return res.json({ msg: 'User Deleted.', users: removed });
-    // res.status(204).end();
+    return res.status(200).json({ msg: 'User Deleted.', users: removed });
+    // return res.status(204).end();
   }
 };
