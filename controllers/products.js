@@ -28,7 +28,7 @@ exports.getProducts = async (req, res, next) => {
           return;
         } else if (category) {
           const getProductsByCategory = await Products.searchByCategory(
-            category
+            category.toLowerCase()
           );
           if (getProductsByCategory.length === 0) {
             return res
@@ -40,7 +40,9 @@ exports.getProducts = async (req, res, next) => {
             products: getProductsByCategory,
           });
         } else if (city) {
-          const getProductsByCity = await Products.searchByCity(city);
+          const getProductsByCity = await Products.searchByCity(
+            city.toLowerCase()
+          );
           if (getProductsByCity.length === 0) {
             return res.status(404).json({ msg: `No products from ${city}.` });
           }
@@ -49,11 +51,11 @@ exports.getProducts = async (req, res, next) => {
             products: getProductsByCity,
           });
         } else if (country) {
-          const getProductsByCountry = await Products.searchByCountry(country);
+          const getProductsByCountry = await Products.searchByCountry(
+            country.toLowerCase()
+          );
           if (getProductsByCountry.length === 0) {
-            return res
-              .status(404)
-              .json({ msg: `No products from ${country}.` });
+            res.status(404).json({ msg: `No products from ${country}.` });
           }
           return res.status(200).json({
             products: getProductsByCountry,
@@ -222,6 +224,7 @@ exports.createProduct = async (req, res, next) => {
           fs.renameSync(image.path, './uploads/' + image.originalname);
         });
       }
+      // TODO TypeError
       let imageUrl = images.map((image) => image.path);
       let pickup;
       if (shipping === 'true') {
@@ -358,7 +361,7 @@ exports.deleteProduct = async (req, res, next) => {
     if (result === undefined) {
       return res.status(401).json({ msg: 'Unauthorized' });
     } else {
-      res.status(200).json({ msg: 'Product Deleted.', product: result });
+      res.status(200).json({ msg: 'Product Deleted.' });
     }
   } catch (error) {
     res.status(400).json({
