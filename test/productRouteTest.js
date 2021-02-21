@@ -1,148 +1,707 @@
 const chai = require('chai');
 const expect = require('chai').expect;
 const assert = require('chai').assert;
-const should = require('chai').should();
+const fs = require('fs');
 chai.use(require('chai-http'));
 chai.use(require('chai-json-schema-ajv'));
-const allProductsSchema = require('../schemas/testSchemas/allProductsSchema.json');
+const testProductSchema = require('../schemas/testSchemas/testProductSchema.json');
 const server = require('../server');
 const jsonwebtoken = require('jsonwebtoken');
 const api = 'http://localhost:3000';
 
-describe('HTTP Product Routes', function () {
-  let token = null;
-  let decodedJwt = null;
+process.env.NODE_ENV = 'test';
 
+createProductTestUser = () => {
+  return chai
+    .request(api)
+    .post('/users/signup')
+    .set('Content-Type', 'application/json')
+    .send({
+      email: 'kenobi@jedi.com',
+      username: 'kenobi',
+      password: 'password',
+      name: {
+        firstname: 'Obi Wan',
+        lastname: 'Kenobi',
+      },
+      address: {
+        street: 'Kuhatie 1',
+        number: 'B10',
+        postcode: '90210',
+        city: 'Oulu',
+        country: 'Finland',
+      },
+      phone: '358859237888',
+    });
+};
+
+describe('Product Routes', function () {
   before(async function () {
     server.start();
-
-    // await chai
-    //   .request(api)
-    //   .get('users/login')
-    //   .auth('anakin', 'password')
-    //   .then((response) => {
-    //     token = response.body.jwt;
-    //     console.log(response.body.jwt);
-    //     decodedJwt = jsonwebtoken.decode(userJwt, { complete: true });
-    //   });
   });
 
   after(async function () {
     server.close();
   });
 
-  /**
-   * Test the GET route /products
-   * Test all products in system
-   */
-  describe('GET all products from URL /products', () => {
-    it('Should get all products in system', (done) => {
-      chai
-        .request(api)
-        .get('/products')
-        .end((err, res) => {
-          res.should.have.status(200);
-          res.body.should.be.a('object');
-          done();
+  describe('Register User To Access Products', () => {
+    it('Should Register a new user to the system', () => {
+      createProductTestUser()
+        .then((response) => {
+          expect(response).to.have.property('status');
+          expect(response.status).to.equal(201);
+          expect(response.body).to.be.jsonSchema(createdUserSuccessfullySchema);
+        })
+        .catch((error) => {
+          assert.fail(error);
         });
     });
+  });
 
-    it('Expect Product to be formed in this order', async function () {
+  describe('Create Product', () => {
+    let token = null;
+    let decodedJwt = null;
+    before(async function () {
+      await chai
+        .request(api)
+        .post('/users/login')
+        .auth('kenobi', 'password')
+        .then((response) => {
+          token = response.body.token;
+          decodedJwt = jsonwebtoken.decode(token, { complete: true });
+        });
+    });
+    it('Should return 201 and create new product with image uploads', async () => {
+      await chai
+        .request(api)
+        .post('/products')
+        .set('Authorization', 'Bearer ' + token)
+        .set('content-type', 'multipart/form-data')
+        .field('title', 'Chair')
+        .field('description', 'A black chair. Good condition.')
+        .field('city', 'Nurmes')
+        .field('country', 'Finland')
+        .field('price', '29.99')
+        .field('shipping', 'false')
+        .field('category', 'Home & Living')
+        .attach(
+          'images',
+          fs.readFileSync(`${__dirname}/images/file.jpg`),
+          'test/images/file.jpg'
+        )
+        .then((response) => {
+          expect(response).to.have.property('status');
+          expect(response.status).to.equal(201);
+        })
+        .catch((error) => {
+          assert.fail(error);
+        });
+    });
+    it('Should return 201 and create new product with multiple image uploads', async () => {
+      await chai
+        .request(api)
+        .post('/products')
+        .set('Authorization', 'Bearer ' + token)
+        .set('content-type', 'multipart/form-data')
+        .field('title', 'Table')
+        .field('description', 'A black table. Good condition.')
+        .field('city', 'Nurmes')
+        .field('country', 'Finland')
+        .field('price', '29.99')
+        .field('shipping', 'false')
+        .field('category', 'Home & Living')
+        .attach(
+          'images',
+          fs.readFileSync(`${__dirname}/images/file.jpg`),
+          'test/images/file.jpg'
+        )
+        .attach(
+          'images',
+          fs.readFileSync(`${__dirname}/images/Orangutan-Jungle-School-1.jpg`),
+          'test/images/Orangutan-Jungle-School-1.jpg'
+        )
+        .attach(
+          'images',
+          fs.readFileSync(`${__dirname}/images/silicon-valley-jokes.jpg`),
+          'test/images/silicon-valley-jokes.jpg'
+        )
+        .attach(
+          'images',
+          fs.readFileSync(`${__dirname}/images/Morty.png`),
+          'test/images/Morty.png'
+        )
+        .then((response) => {
+          expect(response).to.have.property('status');
+          expect(response.status).to.equal(201);
+        })
+        .catch((error) => {
+          assert.fail(error);
+        });
+    });
+    it('Should return status 400 if category missing', async () => {
+      await chai
+        .request(api)
+        .post('/products')
+        .set('Authorization', 'Bearer ' + token)
+        .set('content-type', 'multipart/form-data')
+        .field('title', 'Chair')
+        .field('description', 'A black chair. Good condition.')
+        .field('city', 'Nurmes')
+        .field('country', 'Finland')
+        .field('price', '29.99')
+        .field('shipping', 'false')
+        .attach(
+          'images',
+          fs.readFileSync(`${__dirname}/images/file.jpg`),
+          'test/images/file.jpg'
+        )
+        .attach(
+          'images',
+          fs.readFileSync(`${__dirname}/images/Orangutan-Jungle-School-1.jpg`),
+          'test/images/Orangutan-Jungle-School-1.jpg'
+        )
+        .attach(
+          'images',
+          fs.readFileSync(`${__dirname}/images/silicon-valley-jokes.jpg`),
+          'test/images/silicon-valley-jokes.jpg'
+        )
+        .attach(
+          'images',
+          fs.readFileSync(`${__dirname}/images/Morty.png`),
+          'test/images/Morty.png'
+        )
+        .then((response) => {
+          expect(response).to.have.property('status');
+          expect(response.status).to.equal(400);
+        })
+        .catch((error) => {
+          assert.fail(error);
+        });
+    });
+    it('Should return status 400 if category incorrect', async () => {
+      await chai
+        .request(api)
+        .post('/products')
+        .set('Authorization', 'Bearer ' + token)
+        .set('content-type', 'multipart/form-data')
+        .field('title', 'Chair')
+        .field('description', 'A black chair. Good condition.')
+        .field('city', 'Nurmes')
+        .field('country', 'Finland')
+        .field('price', '29.99')
+        .field('shipping', 'false')
+        .field('category', 'Home & Liv')
+        .attach(
+          'images',
+          fs.readFileSync(`${__dirname}/images/file.jpg`),
+          'test/images/file.jpg'
+        )
+        .attach(
+          'images',
+          fs.readFileSync(`${__dirname}/images/Orangutan-Jungle-School-1.jpg`),
+          'test/images/Orangutan-Jungle-School-1.jpg'
+        )
+        .attach(
+          'images',
+          fs.readFileSync(`${__dirname}/images/silicon-valley-jokes.jpg`),
+          'test/images/silicon-valley-jokes.jpg'
+        )
+        .attach(
+          'images',
+          fs.readFileSync(`${__dirname}/images/Morty.png`),
+          'test/images/Morty.png'
+        )
+        .then((response) => {
+          expect(response).to.have.property('status');
+          expect(response.status).to.equal(400);
+          expect(response.body.msg).to.equal(
+            "Category doesn't exist see list Fashion,Home & Living,Hobbies,Kids,Classes,Properties,Vehicles,Services,Mobile Phones,Pets,Electronics,Machinery,Jobs"
+          );
+        })
+        .catch((error) => {
+          assert.fail(error);
+        });
+    });
+    it('Should return status 400 if no image files attached', async () => {
+      await chai
+        .request(api)
+        .post('/products')
+        .set('Authorization', 'Bearer ' + token)
+        .set('content-type', 'multipart/form-data')
+        .field('title', 'Chair')
+        .field('description', 'A black chair. Good condition.')
+        .field('city', 'Nurmes')
+        .field('country', 'Finland')
+        .field('price', '29.99')
+        .field('shipping', 'false')
+        .field('category', 'Home & Living')
+        .then((response) => {
+          expect(response).to.have.property('status');
+          expect(response.status).to.equal(400);
+          expect(response.body.error).to.equal('No images attached');
+        })
+        .catch((error) => {
+          assert.fail(error);
+        });
+    });
+    it('Should return status 401 if not authorized', async () => {
+      await chai
+        .request(api)
+        .post('/products')
+        .set('content-type', 'multipart/form-data')
+        .field('title', 'Chair')
+        .field('description', 'A black chair. Good condition.')
+        .field('city', 'Nurmes')
+        .field('country', 'Finland')
+        .field('price', '29.99')
+        .field('shipping', 'false')
+        .field('category', 'Home & Living')
+        .attach(
+          'images',
+          fs.readFileSync(`${__dirname}/images/file.jpg`),
+          'test/images/file.jpg'
+        )
+        .then((response) => {
+          expect(response).to.have.property('status');
+          expect(response.status).to.equal(401);
+          expect(response.text).to.equal('Unauthorized');
+        })
+        .catch((error) => {
+          assert.fail(error);
+        });
+    });
+  });
+
+  describe('GET All Products', () => {
+    it('Should get all products in system', async () => {
       await chai
         .request(api)
         .get('/products')
         .then((response) => {
           expect(response).to.have.property('status');
           expect(response.status).to.equal(200);
-          expect(response.body.products[0]).to.be.jsonSchema(allProductsSchema);
-          expect(response.body.products).to.have.lengthOf(3);
-          expect(response.body.products[0].title).to.equal('Asus Laptop');
-          expect(response.body.products[0].description).to.equal(
-            "its working perfect in good condition the enter key don't work and there is no mouse coming with it and it can be used as tablet as well"
-          );
-          expect(response.body.products[0].city).to.equal('Oulu');
-          expect(response.body.products[0].country).to.equal('Finland');
-          expect(response.body.products[0].images).to.be.an('array');
-          expect(response.body.products[0].price).to.be.a('number');
-          expect(response.body.products[0].shipping).to.equal(false);
-          expect(response.body.products[0].pickup).to.equal(true);
-          expect(response.body.products[0].createDate).to.equal('2021-01-10');
+          expect(response.body.products[0]).to.be.jsonSchema(testProductSchema);
         })
         .catch((error) => {
           assert.fail(error);
         });
     });
-
-    /**
-     * Test the GET (by id) /products/:productId
-     * Test a single product by id
-     */
-    it('Should get a single product in system', (done) => {
-      const id = 1;
-      chai
+    it('Should get products filtered by query parameter (city) ', async () => {
+      await chai
         .request(api)
-        .get(`/products/${id}`)
-        .end((err, res) => {
-          res.should.have.status(200);
-          res.body.should.be.a('object');
-          done();
+        .get('/products?city=nurmes')
+        .then((response) => {
+          expect(response).to.have.property('status');
+          expect(response.status).to.equal(200);
+          expect(response.body.products[0]).to.be.jsonSchema(testProductSchema);
+          expect(response.body.products[0].city).to.equal('Nurmes');
+        })
+        .catch((error) => {
+          assert.fail(error);
         });
     });
-    it('Should not get a single product in system', (done) => {
-      const id = 5;
-      chai
+    it('Should get products filtered by query parameter (country) ', async () => {
+      await chai
         .request(api)
-        .get(`/products/${id}`)
-        .end((err, res) => {
-          res.should.have.status(404);
-          done();
+        .get('/products?country=finland')
+        .then((response) => {
+          expect(response).to.have.property('status');
+          expect(response.status).to.equal(200);
+          expect(response.body.products[0]).to.be.jsonSchema(testProductSchema);
+          expect(response.body.products[0].country).to.equal('Finland');
+        })
+        .catch((error) => {
+          assert.fail(error);
+        });
+    });
+    it('Should get products filtered by query parameter (startDate) ', async () => {
+      await chai
+        .request(api)
+        .get('/products?startDate=2021-02-21')
+        .then((response) => {
+          expect(response).to.have.property('status');
+          expect(response.status).to.equal(200);
+          expect(response.body.products[0]).to.be.jsonSchema(testProductSchema);
+        })
+        .catch((error) => {
+          assert.fail(error);
+        });
+    });
+    it('Should get products filtered by query parameter (startDate & endDate) ', async () => {
+      await chai
+        .request(api)
+        .get('/products?startDate=2021-02-21&endDate=2021-02-21')
+        .then((response) => {
+          expect(response).to.have.property('status');
+          expect(response.status).to.equal(200);
+          expect(response.body.products[0]).to.be.jsonSchema(testProductSchema);
+        })
+        .catch((error) => {
+          assert.fail(error);
+        });
+    });
+    it('Should get products filtered by query parameter (category) ', async () => {
+      await chai
+        .request(api)
+        .get('/products?category=home&living')
+        .then((response) => {
+          expect(response).to.have.property('status');
+          expect(response.status).to.equal(200);
+          expect(response.body.products[0]).to.be.jsonSchema(testProductSchema);
+          expect(response.body.products[0].category).to.equal('Home & Living');
+        })
+        .catch((error) => {
+          assert.fail(error);
+        });
+    });
+    it('Should fail to get products filtered by wrong query parameter (category) ', async () => {
+      await chai
+        .request(api)
+        .get('/products?category=gre')
+        .then((response) => {
+          expect(response).to.have.property('status');
+          expect(response.status).to.equal(404);
+        })
+        .catch((error) => {
+          assert.fail(error);
+        });
+    });
+    it('Should fail to get products filtered by wrong query parameter (startDate & endDate) ', async () => {
+      await chai
+        .request(api)
+        .get('/products?startDate=2021-03-10&endDate=2021-04-20')
+        .then((response) => {
+          expect(response).to.have.property('status');
+          expect(response.status).to.equal(404);
+          expect(response.body.msg).to.equal(
+            'No products from 2021-03-10 & 2021-04-20.'
+          );
+        })
+        .catch((error) => {
+          assert.fail(error);
+        });
+    });
+    it('Should fail to get products filtered by wrong query parameter (startDate) ', async () => {
+      await chai
+        .request(api)
+        .get('/products?startDate=2021-03-10')
+        .then((response) => {
+          expect(response).to.have.property('status');
+          expect(response.status).to.equal(404);
+          expect(response.body.msg).to.equal('No products from 2021-03-10.');
+        })
+        .catch((error) => {
+          assert.fail(error);
+        });
+    });
+    it('Should fail to get products filtered by wrong query parameter (country) ', async () => {
+      await chai
+        .request(api)
+        .get('/products?country=sweden')
+        .then((response) => {
+          expect(response).to.have.property('status');
+          expect(response.status).to.equal(404);
+          expect(response.body.msg).to.equal('No products from sweden.');
+        })
+        .catch((error) => {
+          assert.fail(error);
+        });
+    });
+    it('Should fail to get products filtered by wrong query parameter (city) ', async () => {
+      await chai
+        .request(api)
+        .get('/products?city=dublin')
+        .then((response) => {
+          expect(response).to.have.property('status');
+          expect(response.status).to.equal(404);
+          expect(response.body.msg).to.equal('No products from dublin.');
+        })
+        .catch((error) => {
+          assert.fail(error);
         });
     });
   });
 
-  // TODO: test GET products with query params
+  describe('Get product with ID', () => {
+    it('Should get a single product in system', async () => {
+      const id = 1;
+      await chai
+        .request(api)
+        .get(`/products/${id}`)
+        .then((response) => {
+          expect(response).to.have.property('status');
+          expect(response.status).to.equal(200);
+          expect(response.body.result).to.be.jsonSchema(testProductSchema);
+        })
+        .catch((error) => {
+          assert.fail(error);
+        });
+    });
+    it('Should fail if no product in system', async () => {
+      const id = 115;
+      await chai
+        .request(api)
+        .get(`/products/${id}`)
+        .then((response) => {
+          expect(response).to.have.property('status');
+          expect(response.status).to.equal(404);
+          expect(response.body.msg).to.equal(
+            'The product with provided ID does not exist!'
+          );
+        })
+        .catch((error) => {
+          assert.fail(error);
+        });
+    });
+  });
 
-  /**
-   * Test the PUT (by id) /products/:productId
-   */
+  describe('Edit Product with ID', async () => {
+    let token = null;
+    let decodedJwt = null;
+    before(async () => {
+      await chai
+        .request(api)
+        .post('/users/login')
+        .auth('kenobi', 'password')
+        .then((response) => {
+          expect(response).to.have.property('status');
+          expect(response.status).to.equal(200);
+          expect(response.body).to.have.property('token');
+          token = response.body.token;
+          decodedJwt = jsonwebtoken.decode(token, { complete: true });
+        });
+    });
+    it('Should update a single product in system', async () => {
+      const id = 1;
+      await chai
+        .request(api)
+        .put(`/products/${id}`)
+        .set('Authorization', 'Bearer ' + token)
+        .set('content-type', 'multipart/form-data')
+        .field('title', 'Table')
+        .field('description', 'A black table. Good condition.')
+        .field('city', 'Oulu')
+        .field('country', 'Finland')
+        .field('price', '29.99')
+        .field('shipping', 'false')
+        .field('category', 'Home & Living')
+        .attach(
+          'images',
+          fs.readFileSync(`${__dirname}/images/file.jpg`),
+          'test/images/file.jpg'
+        )
+        .then((response) => {
+          expect(response).to.have.property('status');
+          expect(response.status).to.equal(201);
+          expect(response.body.product.title).to.equal('Table');
+          expect(response.body.product.description).to.equal(
+            'A black table. Good condition.'
+          );
+          expect(response.body.product.city).to.equal('Oulu');
+        })
+        .catch((error) => {
+          assert.fail(error);
+        });
+    });
+    it('Should return 401 if not authorized', async () => {
+      const id = 1;
+      await chai
+        .request(api)
+        .put(`/products/${id}`)
+        .set('content-type', 'multipart/form-data')
+        .field('title', 'table')
+        .field('description', 'A black table. Good condition.')
+        .field('city', 'Nurmes')
+        .field('country', 'Finland')
+        .field('price', '29.99')
+        .field('shipping', 'false')
+        .field('category', 'Home & Living')
+        .attach(
+          'images',
+          fs.readFileSync(`${__dirname}/images/file.jpg`),
+          'test/images/file.jpg'
+        )
+        .then((response) => {
+          expect(response).to.have.property('status');
+          expect(response.status).to.equal(401);
+          expect(response.text).to.equal('Unauthorized');
+        })
+        .catch((error) => {
+          assert.fail(error);
+        });
+    });
+    it('Should return 404 if provided ID does not exist', async () => {
+      const id = 111;
+      await chai
+        .request(api)
+        .put(`/products/${id}`)
+        .set('Authorization', 'Bearer ' + token)
+        .set('content-type', 'multipart/form-data')
+        .field('title', 'table')
+        .field('description', 'A black table. Good condition.')
+        .field('city', 'Nurmes')
+        .field('country', 'Finland')
+        .field('price', '29.99')
+        .field('shipping', 'false')
+        .field('category', 'Home & Living')
+        .attach(
+          'images',
+          fs.readFileSync(`${__dirname}/images/file.jpg`),
+          'test/images/file.jpg'
+        )
+        .then((response) => {
+          expect(response).to.have.property('status');
+          expect(response.status).to.equal(404);
+          expect(response.body.msg).to.equal(
+            'The product with provided ID does not exist!'
+          );
+        })
+        .catch((error) => {
+          assert.fail(error);
+        });
+    });
+    it('Should return 400 if category is incorrect', async () => {
+      const id = 1;
+      await chai
+        .request(api)
+        .put(`/products/${id}`)
+        .set('Authorization', 'Bearer ' + token)
+        .set('content-type', 'multipart/form-data')
+        .field('title', 'table')
+        .field('description', 'A black table. Good condition.')
+        .field('city', 'Nurmes')
+        .field('country', 'Finland')
+        .field('price', '29.99')
+        .field('shipping', 'false')
+        .field('category', 'clown')
+        .attach(
+          'images',
+          fs.readFileSync(`${__dirname}/images/file.jpg`),
+          'test/images/file.jpg'
+        )
+        .then((response) => {
+          expect(response).to.have.property('status');
+          expect(response.status).to.equal(400);
+        })
+        .catch((error) => {
+          assert.fail(error);
+        });
+    });
+    it('Should return 400 if category is missing', async () => {
+      const id = 1;
+      await chai
+        .request(api)
+        .put(`/products/${id}`)
+        .set('Authorization', 'Bearer ' + token)
+        .set('content-type', 'multipart/form-data')
+        .field('title', 'table')
+        .field('description', 'A black table. Good condition.')
+        .field('city', 'Nurmes')
+        .field('country', 'Finland')
+        .field('price', '29.99')
+        .field('shipping', 'false')
+        .attach(
+          'images',
+          fs.readFileSync(`${__dirname}/images/file.jpg`),
+          'test/images/file.jpg'
+        )
+        .then((response) => {
+          expect(response).to.have.property('status');
+          expect(response.status).to.equal(400);
+          expect(response.text).to.equal(
+            `["should have required property 'category'"]`
+          );
+        })
+        .catch((error) => {
+          assert.fail(error);
+        });
+    });
+    it('Should return status 400 if no image files attached', async () => {
+      const id = 1;
+      await chai
+        .request(api)
+        .put(`/products/${id}`)
+        .set('Authorization', 'Bearer ' + token)
+        .set('content-type', 'multipart/form-data')
+        .field('title', 'table')
+        .field('description', 'A black table. Good condition.')
+        .field('city', 'Nurmes')
+        .field('country', 'Finland')
+        .field('price', '29.99')
+        .field('shipping', 'false')
+        .field('category', 'Home & Living')
+        .then((response) => {
+          expect(response).to.have.property('status');
+          expect(response.status).to.equal(400);
+          expect(response.body.error).to.equal('No images attached');
+        })
+        .catch((error) => {
+          assert.fail(error);
+        });
+    });
+  });
 
-  /**
-   * Test the DELETE (by id) /products/:productId
-   */
-
-  /**
-   * Test the POST route /products
-   */
-  // describe('Create a new product', function () {
-  //   it('Should create a new product', async function () {
-  //     await (await chai.request(api).post('/products'))
-  //       .set({ Authorization: `Bearer ${token}` })
-  //       .send({
-  //         title: 'Boat',
-  //         description: 'Old boat. Ok condition',
-  //         city: 'Joensuu',
-  //         country: 'Finland',
-  //         images: [{ originalname: 'mando.jpg' }],
-  //         price: 10.5,
-  //         shipping: true,
-  //         pickup: false,
-  //         userId: 'e15c636e-9c72-4f3b-99fe-c72876c186f6',
-  //         user: {
-  //           name: {
-  //             firstname: 'Anakin',
-  //             lastname: 'Skywalker',
-  //           },
-  //           email: 'anakin@jedi.com',
-  //           phone: '358859237845',
-  //         },
-  //         category: 'Vahicles',
-  //         categoryId: 7,
-  //         createDate: '2021-02-14',
-  //       })
-  //       .then((response) => {
-  //         expect(response).to.have.property('status');
-  //         expect(response.status).to.equal(201);
-  //       });
-  //   });
-  // });
+  describe('Delete Product with ID', () => {
+    let token = null;
+    let decodedJwt = null;
+    beforeEach(async () => {
+      await chai
+        .request(api)
+        .post('/users/login')
+        .auth('kenobi', 'password')
+        .then((response) => {
+          expect(response).to.have.property('status');
+          expect(response.status).to.equal(200);
+          expect(response.body).to.have.property('token');
+          token = response.body.token;
+          decodedJwt = jsonwebtoken.decode(token, { complete: true });
+        });
+    });
+    it('Should return 401 if not authorized', async () => {
+      const id = 11;
+      await chai
+        .request(api)
+        .delete(`/products/${id}`)
+        .then((response) => {
+          expect(response).to.have.property('status');
+          expect(response.status).to.equal(401);
+          expect(response.text).to.equal('Unauthorized');
+        })
+        .catch((error) => {
+          assert.fail(error);
+        });
+    });
+    it('Should return 404 if provided ID does not exist', async () => {
+      const id = 111;
+      await chai
+        .request(api)
+        .delete(`/products/${id}`)
+        .set('Authorization', 'Bearer ' + token)
+        .then((response) => {
+          expect(response).to.have.property('status');
+          expect(response.status).to.equal(404);
+          expect(response.body.msg).to.equal(
+            'The product with provided ID does not exist!'
+          );
+        })
+        .catch((error) => {
+          assert.fail(error);
+        });
+    });
+    it('Should delete a single product from the system', async () => {
+      const id = 1;
+      await chai
+        .request(api)
+        .delete(`/products/${id}`)
+        .set('Authorization', 'Bearer ' + token)
+        .then((response) => {
+          expect(response).to.have.property('status');
+          expect(response.status).to.equal(200);
+          expect(response.body.msg).to.equal('Product Deleted.');
+        })
+        .catch((error) => {
+          assert.fail(error);
+        });
+    });
+  });
 });
