@@ -18,6 +18,10 @@ const productComponent = require('./routes/products');
 app.use('/users', userComponent);
 app.use('/products', productComponent);
 
+app.get('/', function (req, res) {
+  res.send('Hello There!');
+});
+
 let server = null;
 
 module.exports = {
