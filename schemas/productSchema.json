@@ -1,0 +1,234 @@
+{
+    "type": "object",
+    "title": "Product schema",
+    "required": [
+        "title",
+        "description",
+        "city",
+        "country",
+        "price",
+        "shipping",
+        "category"
+    ],
+    "properties": {
+        "title": {
+            "$id": "#/properties/title",
+            "type": "string",
+            "title": "The title schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+                "Asus Laptop"
+            ]
+        },
+        "description": {
+            "$id": "#/properties/description",
+            "type": "string",
+            "title": "The description schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+                "its working perfect in good condition the enter key don't work and there is no mouse coming with it and it can be used as tablet as well"
+            ]
+        },
+        "city": {
+            "$id": "#/properties/city",
+            "type": "string",
+            "title": "The city schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+                "Oulu"
+            ]
+        },
+        "country": {
+            "$id": "#/properties/country",
+            "type": "string",
+            "title": "The country schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+                "Finland"
+            ]
+        },
+        "images": {
+            "$id": "#/properties/images",
+            "type": "array",
+            "title": "The images schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": [],
+            "examples": [
+                [
+                    {
+                        "fieldname": "images",
+                        "originalname": "mando.jpg",
+                        "encoding": "7bit",
+                        "mimetype": "image/jpeg",
+                        "destination": "uploads/",
+                        "filename": "6eda04b40903e1050c472f74a42b3f90",
+                        "path": "uploads\\6eda04b40903e1050c472f74a42b3f90",
+                        "size": 744595
+                    },
+                    {
+                        "fieldname": "images",
+                        "originalname": "Morty.png",
+                        "encoding": "7bit",
+                        "mimetype": "image/png",
+                        "destination": "uploads/",
+                        "filename": "cd64ede602128ee905a89f07e1b7713c",
+                        "path": "uploads\\cd64ede602128ee905a89f07e1b7713c",
+                        "size": 253974
+                    }
+                ]
+            ],
+            "items": {
+                "$id": "#/properties/images/items",
+                "anyOf": [
+                    {
+                        "$id": "#/properties/images/items/anyOf/0",
+                        "type": "object",
+                        "title": "The first anyOf schema",
+                        "description": "An explanation about the purpose of this instance.",
+                        "default": {},
+                        "examples": [
+                            {
+                                "fieldname": "images",
+                                "originalname": "mando.jpg",
+                                "encoding": "7bit",
+                                "mimetype": "image/jpeg",
+                                "destination": "uploads/",
+                                "filename": "6eda04b40903e1050c472f74a42b3f90",
+                                "path": "uploads\\6eda04b40903e1050c472f74a42b3f90",
+                                "size": 744595
+                            }
+                        ],
+                        "required": [
+                            "fieldname",
+                            "originalname",
+                            "encoding",
+                            "mimetype",
+                            "destination",
+                            "filename",
+                            "path",
+                            "size"
+                        ],
+                        "properties": {
+                            "fieldname": {
+                                "$id": "#/properties/images/items/anyOf/0/properties/fieldname",
+                                "type": "string",
+                                "title": "The fieldname schema",
+                                "description": "An explanation about the purpose of this instance.",
+                                "default": "",
+                                "examples": [
+                                    "images"
+                                ]
+                            },
+                            "originalname": {
+                                "$id": "#/properties/images/items/anyOf/0/properties/originalname",
+                                "type": "string",
+                                "title": "The originalname schema",
+                                "description": "An explanation about the purpose of this instance.",
+                                "default": "",
+                                "examples": [
+                                    "mando.jpg"
+                                ]
+                            },
+                            "encoding": {
+                                "$id": "#/properties/images/items/anyOf/0/properties/encoding",
+                                "type": "string",
+                                "title": "The encoding schema",
+                                "description": "An explanation about the purpose of this instance.",
+                                "default": "",
+                                "examples": [
+                                    "7bit"
+                                ]
+                            },
+                            "mimetype": {
+                                "$id": "#/properties/images/items/anyOf/0/properties/mimetype",
+                                "type": "string",
+                                "title": "The mimetype schema",
+                                "description": "An explanation about the purpose of this instance.",
+                                "default": "",
+                                "examples": [
+                                    "image/jpeg"
+                                ]
+                            },
+                            "destination": {
+                                "$id": "#/properties/images/items/anyOf/0/properties/destination",
+                                "type": "string",
+                                "title": "The destination schema",
+                                "description": "An explanation about the purpose of this instance.",
+                                "default": "",
+                                "examples": [
+                                    "uploads/"
+                                ]
+                            },
+                            "filename": {
+                                "$id": "#/properties/images/items/anyOf/0/properties/filename",
+                                "type": "string",
+                                "title": "The filename schema",
+                                "description": "An explanation about the purpose of this instance.",
+                                "default": "",
+                                "examples": [
+                                    "6eda04b40903e1050c472f74a42b3f90"
+                                ]
+                            },
+                            "path": {
+                                "$id": "#/properties/images/items/anyOf/0/properties/path",
+                                "type": "string",
+                                "title": "The path schema",
+                                "description": "An explanation about the purpose of this instance.",
+                                "default": "",
+                                "examples": [
+                                    "uploads\\6eda04b40903e1050c472f74a42b3f90"
+                                ]
+                            },
+                            "size": {
+                                "$id": "#/properties/images/items/anyOf/0/properties/size",
+                                "type": "integer",
+                                "title": "The size schema",
+                                "description": "An explanation about the purpose of this instance.",
+                                "default": 0,
+                                "examples": [
+                                    744595
+                                ]
+                            }
+                        },
+                        "additionalProperties": false
+                    }
+                ]
+            }
+        },
+        "price": {
+            "$id": "#/properties/price",
+            "type": "string",
+            "title": "The price schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": 0.0,
+            "examples": [
+                99.99
+            ]
+        },
+        "shipping": {
+            "$id": "#/properties/shipping",
+            "type": "string",
+            "title": "The shipping schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": false,
+            "examples": [
+                false
+            ]
+        },
+        "category": {
+            "$id": "#/properties/category",
+            "type": "string",
+            "title": "The category schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+                "Electronics"
+            ]
+        }
+    },
+    "additionalProperties": false
+}
