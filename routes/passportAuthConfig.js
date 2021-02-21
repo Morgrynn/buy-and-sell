@@ -3,13 +3,14 @@ const BasicStrategy = require('passport-http').BasicStrategy;
 const JwtStrategy = require('passport-jwt').Strategy;
 const ExtractJwt = require('passport-jwt').ExtractJwt;
 const bcrypt = require('bcryptjs');
-const users = require('../services/users');
+const Users = require('../models/users');
 const jwtSecretKey = require('../json/jwtKey.json');
 
 passport.use(
   new BasicStrategy(async function (username, password, done) {
     try {
-      const user = await users.findUserByName(username);
+      const user = await Users.findUserByUsername(username);
+
       if (user == undefined) {
         // Username not found
         console.log('HTTP Error Passport Basic username not found');

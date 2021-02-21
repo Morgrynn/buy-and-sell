@@ -2,20 +2,21 @@ const express = require('express');
 const router = express.Router();
 const passportInstance = require('./passportAuthConfig');
 const Ajv = require('ajv').default;
-const createProductSchema = require('../schemas/productDataSchema.json');
+const ProductSchema = require('../schemas/productSchema.json');
 const productController = require('../controllers/products');
 const multer = require('multer');
 const multerUpload = multer({ dest: 'uploads/' });
+const products = require('../models/products');
 
 /**
- * Middleware 
+ * Middleware
  */
 validateRequests = (req, res, next) => {
   const ajv = new Ajv();
-  const validate = ajv.compile(createProductSchema);
+  const validate = ajv.compile(ProductSchema);
   const valid = validate(req.body);
   if (!valid) {
-    console.log('Validation Errors >>', validate.errors);
+    // console.log('Validation Errors: ProductSchema >>', validate.errors);
     return res.status(400).send(validate.errors.map((e) => e.message));
   }
   next();
@@ -41,11 +42,9 @@ const upload = multerUpload.fields(
   { fileFilter: fileFilter }
 );
 
-
 /**
  * Routes
  */
-
 router.get('', productController.getProducts);
 router.get('/:productId', productController.getProductById);
 router.post(
