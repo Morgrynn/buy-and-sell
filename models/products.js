@@ -108,7 +108,6 @@ const products = {
           ]
         );
         if (result) {
-          console.log('result updateProduct model :>> ', result);
           resolve(true);
         } else {
           reject(false);
@@ -139,7 +138,7 @@ const products = {
   searchByCity: async (value) => {
     return new Promise((resolve, reject) => {
       try {
-        const cityLike = '%' + value + '%';
+        const cityLike = '%' + value.toLowerCase() + '%';
         db.query(
           'SELECT * FROM products_table WHERE city ILIKE $1 order by productid asc',
           [cityLike]
@@ -154,7 +153,7 @@ const products = {
   searchByCountry: async (value) => {
     return new Promise((resolve, reject) => {
       try {
-        const countryLike = '%' + value + '%';
+        const countryLike = '%' + value.toLowerCase() + '%';
         db.query(
           'SELECT * FROM products_table WHERE country ILIKE $1 order by productid asc',
           [countryLike]
@@ -169,7 +168,7 @@ const products = {
   searchByCategory: async (value) => {
     return new Promise((resolve, reject) => {
       try {
-        const categoryLike = '%' + value + '%';
+        const categoryLike = '%' + value.toLowerCase() + '%';
         db.query(
           'SELECT * FROM products_table WHERE category ILIKE $1 order by productid asc',
           [categoryLike]
@@ -189,7 +188,6 @@ const products = {
           'SELECT * FROM products_table WHERE created_on BETWEEN $1 AND $2 order by productid asc',
           [startDate, today]
         ).then((result) => {
-          console.log('res ', result.rows);
           resolve(result.rows);
         });
       } catch (error) {
