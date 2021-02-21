@@ -76,6 +76,11 @@ production.env
 
 # jsonwebtokens
 /json/jwtKey.json
+/json/users.json
+
+# Development files
+/components/imagesUploader.js
+
 
 # parcel-bundler cache (https://parceljs.org/)
 .cache
