@@ -57,7 +57,7 @@ exports.getUser = async (req, res, next) => {
       user: user,
     });
   } catch (error) {
-    res.status(401).json({
+    res.status(404).json({
       reason: error,
     });
   }
@@ -69,7 +69,7 @@ exports.updateUser = async (req, res, next) => {
     const password = bcrypt.hashSync(req.body.password, 6);
     const result = await Users.getUserById(req.params.id);
     if (result == false) {
-      res.status(400).json({ reason: 'UserId not found' });
+      res.status(401).json({ reason: 'UserId not found' });
     } else {
       await Users.update(
         {
@@ -91,7 +91,7 @@ exports.updateUser = async (req, res, next) => {
     }
   } catch (error) {
     console.log(error);
-    res.status(400).json({
+    res.status(401).json({
       reason: error,
     });
   }
@@ -107,7 +107,7 @@ exports.deleteUser = async (req, res, next) => {
       res.status(200).send();
     }
   } catch (error) {
-    res.status(400).json({
+    res.status(401).json({
       reason: error,
     });
   }
