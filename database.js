@@ -27,8 +27,10 @@ const stringTest = new Pool({
 });
 if (process.env.NODE_ENV === 'production') {
   connection = string;
+  console.log('DATABASE NAME: ', connection.options.database);
 } else if (process.env.NODE_ENV === 'test') {
   connection = stringTest;
+  console.log('DATABASE NAME: ', connection.options.database);
 }
 
 // const connection = new Pool({
