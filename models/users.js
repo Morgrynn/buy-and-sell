@@ -1,8 +1,9 @@
-const db = require('../database');
+// const pool = require('../database');
+const { pool } = require('../database');
 
 const users = {
   checkIfExists: (username, callback) => {
-    return db.query(
+    return pool.query(
       'SELECT * FROM users_table WHERE username=$1',
       [username],
       callback
@@ -11,7 +12,7 @@ const users = {
   createNew: async (user) => {
     return new Promise((resolve, reject) => {
       // Check if username is in use
-      db.query(
+      pool.query(
         'SELECT * FROM users_table WHERE username = $1',
         [user.username],
         function (error, results) {
@@ -22,7 +23,7 @@ const users = {
             reject('User exists');
           } else {
             // Create new user
-            db.query(
+            pool.query(
               'INSERT INTO users_table (userId, email, username, password, firstname, lastname, street, number, postcode, city, country, phone, createDate) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)',
               [
                 user.userId,
@@ -51,7 +52,7 @@ const users = {
   },
   getUserById: async (userId) => {
     return new Promise((resolve, reject) => {
-      db.query(
+      pool.query(
         `SELECT * FROM users_table WHERE userid = $1`,
         [userId],
         function (error, result) {
@@ -67,7 +68,7 @@ const users = {
   update: async (user, userId) => {
     return new Promise(async (resolve, reject) => {
       try {
-        const result = await db.query(
+        const result = await pool.query(
           'UPDATE users_table set username=$1, password=$2, firstname=$3, lastname=$4, street=$5, number=$6, postcode=$7, city=$8, country=$9, phone=$10, createDate=$11 WHERE userid=$12',
           [
             user.username,
@@ -96,7 +97,7 @@ const users = {
   },
   findUserByUsername: async (username) => {
     return new Promise((resolve, reject) => {
-      db.query(
+      pool.query(
         'select * from users_table where username=$1',
         [username],
         function (error, result) {
@@ -112,7 +113,7 @@ const users = {
   deleteById: async (userId) => {
     return new Promise(async (resolve, reject) => {
       try {
-        const result = await db.query(
+        const result = await pool.query(
           'DELETE FROM users_table WHERE userid=$1',
           [userId]
         );

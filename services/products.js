@@ -1,6 +1,7 @@
 const productData = require('../components/Products');
 const categoryData = require('../components/Categories');
 
+// Used for hardcoded test data
 module.exports = {
   getProducts: () => productData,
   getProductById: (id) =>

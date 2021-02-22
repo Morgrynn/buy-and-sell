@@ -5,7 +5,7 @@ const app = express();
 const morgan = require('morgan');
 const dotenv = require('dotenv');
 
-app.set('port', process.env.PORT || 80);
+const port = process.env.PORT || 3000;
 
 // app.use(morgan('dev'));
 app.use(bodyParser.json());
@@ -26,8 +26,8 @@ let server = null;
 
 module.exports = {
   start: function () {
-    server = app.listen(app.get('port'), () => {
-      console.log('Node app is running on port', app.get('port'));
+    server = app.listen(port, () => {
+      console.log(`Server listening at http://localhost:${port}`);
     });
   },
   close: function () {

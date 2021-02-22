@@ -29,6 +29,7 @@ exports.registration = async (req, res, next) => {
       userId: user.userId,
     });
   } catch (error) {
+    console.log(error);
     res.status(400).json({
       reason: error,
     });

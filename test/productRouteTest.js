@@ -424,7 +424,7 @@ describe('Product Routes', function () {
 
   describe('Get product with ID', () => {
     it('Should get a single product in system', async () => {
-      const id = 1;
+      const id = 5;
       await chai
         .request(api)
         .get(`/products/${id}`)
@@ -472,7 +472,7 @@ describe('Product Routes', function () {
         });
     });
     it('Should update a single product in system', async () => {
-      const id = 1;
+      const id = 5;
       await chai
         .request(api)
         .put(`/products/${id}`)
@@ -504,7 +504,7 @@ describe('Product Routes', function () {
         });
     });
     it('Should return 401 if not authorized', async () => {
-      const id = 1;
+      const id = 5;
       await chai
         .request(api)
         .put(`/products/${id}`)
@@ -561,7 +561,7 @@ describe('Product Routes', function () {
         });
     });
     it('Should return 400 if category is incorrect', async () => {
-      const id = 1;
+      const id = 5;
       await chai
         .request(api)
         .put(`/products/${id}`)
@@ -588,7 +588,7 @@ describe('Product Routes', function () {
         });
     });
     it('Should return 400 if category is missing', async () => {
-      const id = 1;
+      const id = 5;
       await chai
         .request(api)
         .put(`/products/${id}`)
@@ -617,7 +617,7 @@ describe('Product Routes', function () {
         });
     });
     it('Should return status 400 if no image files attached', async () => {
-      const id = 1;
+      const id = 5;
       await chai
         .request(api)
         .put(`/products/${id}`)
@@ -689,7 +689,7 @@ describe('Product Routes', function () {
         });
     });
     it('Should delete a single product from the system', async () => {
-      const id = 1;
+      const id = 12;
       await chai
         .request(api)
         .delete(`/products/${id}`)
