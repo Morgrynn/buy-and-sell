@@ -43,14 +43,17 @@ let connection;
 // }
 
 if (process.env.NODE_ENV === 'production') {
+  console.log('prod database con');
   connection = new Pool({
     connectionString: connectionString,
   });
 } else if (process.env.NODE_ENV === 'test') {
+  console.log('test database con');
   connection = new Pool({
     connectionString: connectionTestString,
   });
 } else {
+  console.log('heroku database con');
   connection = new Client({
     connectionString: process.env.DATABASE_URL,
     ssl: {

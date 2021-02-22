@@ -16,6 +16,7 @@ const users = {
         'SELECT * FROM users_table WHERE username = $1',
         [user.username],
         function (error, results) {
+          console.log('create new model line 19 >> ', results);
           if (error != null) {
             reject(error);
           }
