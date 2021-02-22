@@ -4,7 +4,6 @@ const JwtStrategy = require('passport-jwt').Strategy;
 const ExtractJwt = require('passport-jwt').ExtractJwt;
 const bcrypt = require('bcryptjs');
 const Users = require('../models/users');
-const jwtSecretKey = require('../json/jwtKey.json');
 
 passport.use(
   new BasicStrategy(async function (username, password, done) {
@@ -30,6 +29,13 @@ passport.use(
   })
 );
 
+let jwtSecretKey = null;
+if (process.env.JWTKEY === undefined) {
+  jwtSecretKey = require('../json/jwtKey.json').key;
+} else {
+  jwtSecretKey = process.env.JWTKEY;
+}
+
 let options = {};
 
 /* Configure the passport-jwt module to expect JWT
@@ -38,7 +44,7 @@ options.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
 
 /* This is the secret signing key.
    You should NEVER store it in code  */
-options.secretOrKey = jwtSecretKey.key;
+options.secretOrKey = jwtSecretKey;
 
 passport.use(
   new JwtStrategy(options, function (jwt_payload, done) {

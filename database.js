@@ -31,6 +31,9 @@ if (process.env.NODE_ENV === 'production') {
 } else if (process.env.NODE_ENV === 'test') {
   connection = stringTest;
   console.log('DATABASE NAME: ', connection.options.database);
+} else {
+  connection = string;
+  console.log('DATABASE NAME: ', connection.options.database);
 }
 
 // const connection = new Pool({

@@ -2,7 +2,7 @@ const { v4: uuidv4 } = require('uuid');
 const Users = require('../models/users');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const jwtSecretKey = require('../json/jwtKey.json');
+// const jwtSecretKey = require('../json/jwtKey.json');
 
 exports.registration = async (req, res, next) => {
   try {
@@ -41,7 +41,7 @@ exports.login = async (req, res, next) => {
     const body = { id: result.userid };
     const payload = { user: body };
     const options = { expiresIn: '1h' };
-    const token = jwt.sign(payload, jwtSecretKey.key, options);
+    const token = jwt.sign(payload, process.env.JWTKEY, options);
     return res.status(200).json({ token: token, userId: body.id });
   } catch (error) {
     res.status(400).json({ reason: error });
