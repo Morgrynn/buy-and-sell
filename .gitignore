@@ -82,6 +82,8 @@ production.env
 /components/imagesUploader.js
 /models/db.js
 /config
+config.js
+
 
 
 # parcel-bundler cache (https://parceljs.org/)

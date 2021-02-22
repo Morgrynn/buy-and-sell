@@ -1,5 +1,5 @@
-// const Pool = require('pg').Pool;
-const { Pool, Client } = require('pg');
+const Pool = require('pg').Pool;
+// const { Pool, Client } = require('pg');
 
 const dotenv = require('dotenv');
 
@@ -10,8 +10,8 @@ const connectionString = `postgresql://${process.env.DATABASE_USERNAME}:${proces
 const connectionTestString = `postgresql://${process.env.TEST_DATABASE_USERNAME}:${process.env.TEST_DATABASE_PASSWORD}@${process.env.HOST}:${process.env.DB_PORT}/${process.env.TEST_DATABASE_NAME}`;
 
 // process.env.NODE_ENV = 'test';
-process.env.NODE_ENV === 'production';
-let pool;
+// process.env.NODE_ENV === 'production';
+let connection;
 // const string = new Pool({
 //   user: process.env.DATABASE_USERNAME,
 //   host: process.env.HOST,
@@ -43,15 +43,15 @@ let pool;
 // }
 
 if (process.env.NODE_ENV === 'production') {
-  pool = new Pool({
+  connection = new Pool({
     connectionString: connectionString,
   });
 } else if (process.env.NODE_ENV === 'test') {
-  pool = new Pool({
+  connection = new Pool({
     connectionString: connectionTestString,
   });
 } else {
-  pool = new Client({
+  connection = new Client({
     connectionString: process.env.DATABASE_URL,
     ssl: {
       rejectUnauthorized: false,
@@ -75,5 +75,5 @@ if (process.env.NODE_ENV === 'production') {
 //   pool.end()
 // })
 
-// module.exports = connection;
-module.exports = { pool };
+module.exports = connection;
+// module.exports = { pool };
