@@ -46,19 +46,18 @@ if (process.env.NODE_ENV === 'production') {
   pool = new Pool({
     connectionString: connectionString,
   });
-  console.log(pool.options.connectionString);
 } else if (process.env.NODE_ENV === 'test') {
   pool = new Pool({
     connectionString: connectionTestString,
   });
-  console.log(pool.options.connectionString);
-  // console.log('DATABASE NAME: ', connection.options.database);
-  // console.log('DATABASE NAME: ', pool.options.database);
+} else {
+  pool = new Client({
+    connectionString: process.env.DATABASE_URL,
+    ssl: {
+      rejectUnauthorized: false,
+    },
+  });
 }
-// else {
-//   pool = string;
-//   console.log('DATABASE NAME: ', pool.options.database);
-// }
 
 // const isProduction = process.env.NODE_ENV === 'production';
 // // const connectionString = `postgresql://${process.env.DATABASE_USERNAME}:${process.env.DATABASE_PASSWORD}@${process.env.HOST}:${process.env.DB_PORT}/${process.env.DATABASE_NAME}`;
