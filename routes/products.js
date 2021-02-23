@@ -4,8 +4,8 @@ const passportInstance = require('./passportAuthConfig');
 const Ajv = require('ajv').default;
 const ProductSchema = require('../schemas/productSchema.json');
 const productController = require('../controllers/products');
-const cloudinary = require('cloudinary');
-const cloudinaryStorage = require('multer-storage-cloudinary');
+const cloudinary = require('cloudinary').v2;
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const multer = require('multer');
 const multerUpload = multer({ dest: 'uploads/' });
 const products = require('../models/products');
@@ -44,9 +44,9 @@ const upload = multerUpload.fields(
   { fileFilter: fileFilter }
 );
 
-var storage = cloudinaryStorage({
+const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
-  folder: '', // give cloudinary folder where you want to store images
+  folder: './uploads/', // give cloudinary folder where you want to store images
   allowedFormats: ['jpg', 'png', 'jpeg'],
 });
 
