@@ -212,7 +212,7 @@ exports.createProduct = async (req, res, next) => {
         .json({ msg: `Category doesn't exist see list ${categories}` });
     } else {
       const { title, description, city, country, price, shipping } = req.body;
-      // const { images } = req.files;
+      const { images } = req.files;
       // if (!images) {
       //   res.status(400).json({
       //     error: 'No images attached',
@@ -246,7 +246,7 @@ exports.createProduct = async (req, res, next) => {
         description: description,
         city: city,
         country: country,
-        images: ,
+        images: images,
         price: parseFloat(price),
         shipping: shipping,
         pickup: pickup,
