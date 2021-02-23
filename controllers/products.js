@@ -246,7 +246,7 @@ exports.createProduct = async (req, res, next) => {
         description: description,
         city: city,
         country: country,
-        images: images,
+        images: imageUrl,
         price: parseFloat(price),
         shipping: shipping,
         pickup: pickup,
