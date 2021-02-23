@@ -212,7 +212,7 @@ exports.createProduct = async (req, res, next) => {
         .json({ msg: `Category doesn't exist see list ${categories}` });
     } else {
       const { title, description, city, country, price, shipping } = req.body;
-      const { images } = req.files;
+      let images = req.files;
       // if (!images) {
       //   res.status(400).json({
       //     error: 'No images attached',
@@ -229,12 +229,14 @@ exports.createProduct = async (req, res, next) => {
       //   res.json({ files: req.files });
       // }
       if (images) {
-        res.json({ files: req.files });
+        images.map((image) => image.path);
       } else {
-        res.json({ nofiles: req.files });
+        res.status(400).json({
+          error: 'No images attached',
+        });
       }
       // TODO TypeError
-      let imageUrl = images.map((image) => image.path);
+      // let imageUrl = images.map((image) => image.path);
       let pickup;
       if (shipping === 'true') {
         pickup = false;
@@ -246,7 +248,7 @@ exports.createProduct = async (req, res, next) => {
         description: description,
         city: city,
         country: country,
-        images: imageUrl,
+        images: images,
         price: parseFloat(price),
         shipping: shipping,
         pickup: pickup,
