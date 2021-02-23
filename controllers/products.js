@@ -214,19 +214,19 @@ exports.createProduct = async (req, res, next) => {
       const { title, description, city, country, price, shipping } = req.body;
       const { images } = req.files;
       if (!images) {
-        res.json(req.files);
-        // res.status(400).json({
-        //   error: 'No images attached',
-        // });
+        res.status(400).json({
+          error: 'No images attached',
+        });
       } else if (Object.values(images).length === 1) {
-        (image) => fs.rename(image.path, './uploads/' + image.originalname);
+        // (image) => fs.rename(image.path, './uploads/' + image.originalname);
+        (image) => image.path;
       } else {
-        // images.forEach((image) => {
-        //   fs.renameSync(image.path, './uploads/' + image.originalname);
-        // });
-        console.log(req.file);
+        images.forEach((image) => {
+          // fs.renameSync(image.path, './uploads/' + image.originalname);
+          image.path;
+        });
         res.status(201);
-        res.json(req.file);
+        res.json({ files: req.files });
       }
       // TODO TypeError
       let imageUrl = images.map((image) => image.path);
