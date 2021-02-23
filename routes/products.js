@@ -44,13 +44,19 @@ const upload = multerUpload.fields(
   { fileFilter: fileFilter }
 );
 
-const storage = cloudinaryStorage({
+var storage = cloudinaryStorage({
   cloudinary: cloudinary,
-  folder: '',
-  allowedFormates: ['jpg', 'jpeg', 'png'],
+  folder: '', // give cloudinary folder where you want to store images
+  allowedFormats: ['jpg', 'png', 'jpeg'],
 });
 
-const parser = multer({ storage: storage });
+const parser = multer.fields(
+  [
+    { name: 'image', maxCount: 1 },
+    { name: 'images', maxCount: 4 },
+  ],
+  { storage: storage }
+);
 
 /**
  * Routes
