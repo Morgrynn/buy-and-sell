@@ -50,13 +50,7 @@ const storage = new CloudinaryStorage({
   allowedFormats: ['jpg', 'png', 'jpeg'],
 });
 
-const parser = multer.fields(
-  [
-    { name: 'image', maxCount: 1 },
-    { name: 'images', maxCount: 4 },
-  ],
-  { storage: storage }
-);
+const parser = multer({ storage: storage });
 
 /**
  * Routes
@@ -66,7 +60,7 @@ router.get('/:productId', productController.getProductById);
 router.post(
   '',
   passportInstance.authenticate('jwt', { session: false }),
-  parser,
+  parser.array('images'),
   validateRequests,
   productController.createProduct
 );
