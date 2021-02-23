@@ -212,21 +212,26 @@ exports.createProduct = async (req, res, next) => {
         .json({ msg: `Category doesn't exist see list ${categories}` });
     } else {
       const { title, description, city, country, price, shipping } = req.body;
-      const { images } = req.files;
-      if (!images) {
-        res.status(400).json({
-          error: 'No images attached',
-        });
-      } else if (Object.values(images).length === 1) {
-        // (image) => fs.rename(image.path, './uploads/' + image.originalname);
-        (image) => image.path;
-      } else {
-        images.forEach((image) => {
-          // fs.renameSync(image.path, './uploads/' + image.originalname);
-          image.path;
-        });
-        res.status(201);
+      // const { images } = req.files;
+      // if (!images) {
+      //   res.status(400).json({
+      //     error: 'No images attached',
+      //   });
+      // } else if (Object.values(images).length === 1) {
+      //   // (image) => fs.rename(image.path, './uploads/' + image.originalname);
+      //   (image) => image.path;
+      // } else {
+      //   images.forEach((image) => {
+      //     // fs.renameSync(image.path, './uploads/' + image.originalname);
+      //     image.path;
+      //   });
+      //   res.status(201);
+      //   res.json({ files: req.files });
+      // }
+      if (req.files) {
         res.json({ files: req.files });
+      } else {
+        res.json({ nofiles: req.files });
       }
       // TODO TypeError
       let imageUrl = images.map((image) => image.path);
@@ -241,7 +246,7 @@ exports.createProduct = async (req, res, next) => {
         description: description,
         city: city,
         country: country,
-        images: imageUrl,
+        images: ,
         price: parseFloat(price),
         shipping: shipping,
         pickup: pickup,

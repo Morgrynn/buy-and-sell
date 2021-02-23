@@ -62,12 +62,15 @@ dotenv.config();
 //   });
 // }
 
-const connection = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: {
-    rejectUnauthorized: false,
+const connection = new Pool(
+  {
+    connectionString: process.env.DATABASE_URL,
+    ssl: {
+      rejectUnauthorized: false,
+    },
   },
-});
+  console.log('Database')
+);
 
 // const isProduction = process.env.NODE_ENV === 'production';
 // // const connectionString = `postgresql://${process.env.DATABASE_USERNAME}:${process.env.DATABASE_PASSWORD}@${process.env.HOST}:${process.env.DB_PORT}/${process.env.DATABASE_NAME}`;
