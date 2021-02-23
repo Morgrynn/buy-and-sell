@@ -228,7 +228,7 @@ exports.createProduct = async (req, res, next) => {
       //   res.status(201);
       //   res.json({ files: req.files });
       // }
-      if (req.files) {
+      if (images) {
         res.json({ files: req.files });
       } else {
         res.json({ nofiles: req.files });
