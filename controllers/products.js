@@ -214,7 +214,7 @@ exports.createProduct = async (req, res, next) => {
       const { title, description, city, country, price, shipping } = req.body;
       const { images } = req.files;
       if (!images) {
-        res.json(req.file);
+        res.json(req.files);
         // res.status(400).json({
         //   error: 'No images attached',
         // });
