@@ -220,9 +220,12 @@ exports.createProduct = async (req, res, next) => {
       } else if (Object.values(images).length === 1) {
         (image) => fs.rename(image.path, './uploads/' + image.originalname);
       } else {
-        images.forEach((image) => {
-          fs.renameSync(image.path, './uploads/' + image.originalname);
-        });
+        // images.forEach((image) => {
+        //   fs.renameSync(image.path, './uploads/' + image.originalname);
+        // });
+        console.log(req.file);
+        res.status(201);
+        res.json(req.file);
       }
       // TODO TypeError
       let imageUrl = images.map((image) => image.path);

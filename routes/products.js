@@ -4,6 +4,8 @@ const passportInstance = require('./passportAuthConfig');
 const Ajv = require('ajv').default;
 const ProductSchema = require('../schemas/productSchema.json');
 const productController = require('../controllers/products');
+const cloudinary = require('cloudinary');
+const cloudinaryStorage = require('multer-storage-cloudinary');
 const multer = require('multer');
 const multerUpload = multer({ dest: 'uploads/' });
 const products = require('../models/products');
@@ -42,6 +44,14 @@ const upload = multerUpload.fields(
   { fileFilter: fileFilter }
 );
 
+const storage = cloudinaryStorage({
+  cloudinary: cloudinary,
+  folder: '',
+  allowedFormates: ['jpg', 'jpeg', 'png'],
+});
+
+const parser = multer({ storage: storage });
+
 /**
  * Routes
  */
@@ -50,7 +60,7 @@ router.get('/:productId', productController.getProductById);
 router.post(
   '',
   passportInstance.authenticate('jwt', { session: false }),
-  upload,
+  parser,
   validateRequests,
   productController.createProduct
 );
