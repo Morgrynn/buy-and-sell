@@ -228,8 +228,9 @@ exports.createProduct = async (req, res, next) => {
       //   res.status(201);
       //   res.json({ files: req.files });
       // }
+      let imageUrl;
       if (images) {
-        images.map((image) => image.path);
+        imageUrl = images.map((image) => image.path);
       } else {
         res.status(400).json({
           error: 'No images attached',
@@ -248,7 +249,7 @@ exports.createProduct = async (req, res, next) => {
         description: description,
         city: city,
         country: country,
-        images: images,
+        images: imageUrl,
         price: parseFloat(price),
         shipping: shipping,
         pickup: pickup,
