@@ -28,10 +28,7 @@
     "required": [
         "email",
         "username",
-        "password",
-        "name",
-        "address",
-        "phone"
+        "password" 
     ],
     "properties": {
         "userId": {
