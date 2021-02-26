@@ -5,7 +5,7 @@ const dotenv = require('dotenv');
 
 dotenv.config();
 
-const connectionString = `postgresql://${process.env.DATABASE_USERNAME}:${process.env.DATABASE_PASSWORD}@${process.env.HOST}:${process.env.DB_PORT}/${process.env.DATABASE_NAME}`;
+// const connectionString = `postgresql://${process.env.DATABASE_USERNAME}:${process.env.DATABASE_PASSWORD}@${process.env.HOST}:${process.env.DB_PORT}/${process.env.DATABASE_NAME}`;
 
 const connectionTestString = `postgresql://${process.env.TEST_DATABASE_USERNAME}:${process.env.TEST_DATABASE_PASSWORD}@${process.env.HOST}:${process.env.DB_PORT}/${process.env.TEST_DATABASE_NAME}`;
 
@@ -41,13 +41,14 @@ const connectionTestString = `postgresql://${process.env.TEST_DATABASE_USERNAME}
 //   });
 //   console.log('DATABASE NAME: ', pool.options.connectionString);
 // }
-
-if (process.env.NODE_ENV === 'production') {
-  console.log('prod database con');
-  connection = new Pool({
-    connectionString: connectionString,
-  });
-} else if (process.env.NODE_ENV === 'test') {
+let connection;
+// if (process.env.NODE_ENV === 'production') {
+//   console.log('prod database con');
+//   connection = new Pool({
+//     connectionString: connectionString,
+//   });
+// } else
+if (process.env.NODE_ENV === 'test') {
   console.log('test database con');
   connection = new Pool({
     connectionString: connectionTestString,
@@ -62,15 +63,12 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
-// const connection = new Pool(
-//   {
-//     connectionString: process.env.DATABASE_URL,
-//     ssl: {
-//       rejectUnauthorized: false,
-//     },
+// const connection = new Pool({
+//   connectionString: process.env.DATABASE_URL,
+//   ssl: {
+//     rejectUnauthorized: false,
 //   },
-//   console.log('Database')
-// );
+// });
 
 // const isProduction = process.env.NODE_ENV === 'production';
 // // const connectionString = `postgresql://${process.env.DATABASE_USERNAME}:${process.env.DATABASE_PASSWORD}@${process.env.HOST}:${process.env.DB_PORT}/${process.env.DATABASE_NAME}`;
